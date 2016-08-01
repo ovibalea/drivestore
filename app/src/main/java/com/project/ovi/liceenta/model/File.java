@@ -11,9 +11,9 @@ public class File extends DriveItem {
 
     private Double size;
 
-    public File(com.google.api.services.drive.model.File metadata) {
+    public File(Metadata metadata) {
         super(metadata);
     }
 
-
+   
 }

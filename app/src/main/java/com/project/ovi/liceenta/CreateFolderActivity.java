@@ -20,7 +20,7 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveFolder.DriveFolderResult;
+import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 
 /**
@@ -35,7 +35,7 @@ public class CreateFolderActivity extends BaseManagerActivity {
     @Override
     public void onConnected(Bundle connectionHint) {
         super.onConnected(connectionHint);
-
+//
         MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                 .setTitle("New folder").build();
         Drive.DriveApi.getRootFolder(getGoogleApiClient()).createFolder(
@@ -63,9 +63,9 @@ public class CreateFolderActivity extends BaseManagerActivity {
 
     }
 
-    final ResultCallback<DriveFolderResult> callback = new ResultCallback<DriveFolderResult>() {
+    final ResultCallback<DriveFolder.DriveFolderResult> callback = new ResultCallback<DriveFolder.DriveFolderResult>() {
         @Override
-        public void onResult(DriveFolderResult result) {
+        public void onResult(DriveFolder.DriveFolderResult result) {
             if (!result.getStatus().isSuccess()) {
                 showMessage("Error while trying to create the folder");
                 return;

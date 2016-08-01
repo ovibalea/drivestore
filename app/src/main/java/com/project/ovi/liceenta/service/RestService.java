@@ -1,8 +1,7 @@
 package com.project.ovi.liceenta.service;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -81,11 +80,11 @@ public class RestService {
                         .setDataStoreFactory(DATA_STORE_FACTORY)
                         .setAccessType("offline")
                         .build();
-        Credential credential = new AuthorizationCodeInstalledApp(
-                flow, new LocalServerReceiver()).authorize("user");
+//        Credential credential = new AuthorizationCodeInstalledApp(
+//                flow, new LocalServerReceiver()).authorize("user");
         System.out.println(
                 "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
-        return credential;
+        return null;
     }
 
     /**
@@ -99,6 +98,24 @@ public class RestService {
                 HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
+    }
+
+    public static void main(String[] args) throws IOException {
+        // Build a new authorized API client service.
+        Drive service = getDriveService();
+
+        // Print the names and IDs for up to 10 files.
+        FileList result = service.files().list()
+                .execute();
+        List<File> files = result.getFiles();
+        if (files == null || files.size() == 0) {
+            System.out.println("No files found.");
+        } else {
+            System.out.println("Files:");
+            for (File file : files) {
+                System.out.printf("%s (%s)\n", file.getName(), file.getId());
+            }
+        }
     }
 
 }

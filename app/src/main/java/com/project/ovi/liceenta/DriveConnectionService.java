@@ -50,10 +50,10 @@ public class DriveConnectionService implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.i(TAG, "GoogleApiClient connection failed: " + connectionResult.toString());
         if (!connectionResult.hasResolution()) {
-            // show the localized error dialog.
+////             show the localized error dialog.
 //            GoogleApiAvailability.getInstance().getErrorDialog(this, connectionResult.getErrorCode(), 0).show();
 //            Log.i(connectionResult.getErrorCode());
-            return;
+//            return;
         }
 //        try {
 ////            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);

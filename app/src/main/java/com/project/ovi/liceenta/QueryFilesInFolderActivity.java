@@ -20,11 +20,10 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
-import com.google.android.gms.drive.DriveApi.DriveIdResult;
-import com.google.android.gms.drive.DriveApi.MetadataBufferResult;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
@@ -43,24 +42,24 @@ import java.util.List;
 public class QueryFilesInFolderActivity extends BaseManagerActivity {
 
     private ListView mResultsListView;
-    private ResultsAdapter mResultsAdapter;
+//    private ResultsAdapter mResultsAdapter;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_listfiles);
         mResultsListView = (ListView) findViewById(R.id.listViewResults);
-        mResultsAdapter = new ResultsAdapter(this);
-        mResultsListView.setAdapter(mResultsAdapter);
+//        mResultsAdapter = new ResultsAdapter(this);
+//        mResultsListView.setAdapter(mResultsAdapter);
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
         super.onConnected(connectionHint);
-//        String driveId = Drive.DriveApi.getRootFolder(getGoogleApiClient()).getDriveId().toString().substring(8);
-//        Log.i("QueryFiles", driveId);
-//        DriveFolder root = Drive.DriveApi.getRootFolder(getGoogleApiClient());
-//        root.listChildren(getGoogleApiClient()).setResultCallback(resultCallB);
+        String driveId = Drive.DriveApi.getRootFolder(getGoogleApiClient()).getDriveId().toString().substring(8);
+        Log.i("QueryFiles", driveId);
+        DriveFolder root = Drive.DriveApi.getRootFolder(getGoogleApiClient());
+        root.listChildren(getGoogleApiClient()).setResultCallback(resultCallB);
         queryFolder();
 
     }
@@ -75,22 +74,22 @@ public class QueryFilesInFolderActivity extends BaseManagerActivity {
     /**
      * Appends the retrieved results to the result buffer.
      */
-    private final ResultCallback<MetadataBufferResult> metadataBufferCallback = new
-            ResultCallback<MetadataBufferResult>() {
+    private final ResultCallback<DriveApi.MetadataBufferResult> metadataBufferCallback = new
+            ResultCallback<DriveApi.MetadataBufferResult>() {
                 @Override
-                public void onResult(MetadataBufferResult result) {
+                public void onResult(DriveApi.MetadataBufferResult result) {
                     if (!result.getStatus().isSuccess()) {
                         showMessage("Problem while retrieving files");
                         return;
                     }
-                    mResultsAdapter.append(result.getMetadataBuffer());
+//                    mResultsAdapter.append(result.getMetadataBuffer());
 
                 }
             };
 
-    final private ResultCallback<DriveIdResult> idCallback = new ResultCallback<DriveIdResult>() {
+    final private ResultCallback<DriveApi.DriveIdResult> idCallback = new ResultCallback<DriveApi.DriveIdResult>() {
         @Override
-        public void onResult(DriveIdResult result) {
+        public void onResult(DriveApi.DriveIdResult result) {
             if (!result.getStatus().isSuccess()) {
                 showMessage("Cannot find DriveId. Are you authorized to view this file?");
                 return;
@@ -116,7 +115,7 @@ public class QueryFilesInFolderActivity extends BaseManagerActivity {
 
             MetadataBuffer metadataBuffer = result.getMetadataBuffer();
             Metadata filedata;
-            List<MetadataBufferResult> resultList = new ArrayList<>();
+            List<DriveApi.MetadataBufferResult> resultList = new ArrayList<>();
             LauncherActivity.ListItem[] items = new LauncherActivity.ListItem[metadataBuffer.getCount()];
             Log.i("","Count :" + metadataBuffer.getCount());
             for (int i = 0; i < metadataBuffer.getCount(); i++) {
@@ -126,16 +125,16 @@ public class QueryFilesInFolderActivity extends BaseManagerActivity {
         }
     };
 
-    final private ResultCallback<MetadataBufferResult> metadataCallback = new
-            ResultCallback<MetadataBufferResult>() {
+    final private ResultCallback<DriveApi.MetadataBufferResult> metadataCallback = new
+            ResultCallback<DriveApi.MetadataBufferResult>() {
         @Override
-        public void onResult(MetadataBufferResult result) {
+        public void onResult(DriveApi.MetadataBufferResult result) {
             if (!result.getStatus().isSuccess()) {
                 showMessage("Problem while retrieving files");
                 return;
             }
-            mResultsAdapter.clear();
-            mResultsAdapter.append(result.getMetadataBuffer());
+//            mResultsAdapter.clear();
+//            mResultsAdapter.append(result.getMetadataBuffer());
             showMessage("Successfully listed files.");
         }
     };

@@ -88,14 +88,14 @@ public class ListOjectsFromRootActivity extends BaseManagerActivity {
                     Iterator<Metadata> resultsIterator = result.getMetadataBuffer().iterator();
                     while (resultsIterator.hasNext()){
                         Metadata item = resultsIterator.next();
-//                        driveItems.add(new DriveItem(item));
+                        driveItems.add(new DriveItem(item));
                     }
 
 //                    DriveItemsViewAdapter driveItemsViewAdapter = new DriveItemsViewAdapter(driveItems);
 //                    recyclerView.setAdapter(driveItemsViewAdapter);
 //                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-                    finish();
+//                    finish();
 
                 }
             };
@@ -104,6 +104,7 @@ public class ListOjectsFromRootActivity extends BaseManagerActivity {
     @Override
     public void finish(){
         Intent returnIntent = new Intent();
+        returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         returnIntent.putExtra(DRIVE_ITEMS_RESULT_TAG, driveItems);
         setResult(RESULT_OK, returnIntent);
         super.finish();

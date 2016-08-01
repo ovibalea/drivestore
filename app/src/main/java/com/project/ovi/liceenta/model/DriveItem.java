@@ -1,7 +1,6 @@
 package com.project.ovi.liceenta.model;
 
 import com.google.android.gms.drive.Metadata;
-import com.google.api.services.drive.model.*;
 
 import java.io.Serializable;
 
@@ -16,12 +15,10 @@ public class DriveItem implements Serializable{
 
     private boolean isFolder;
 
-    public DriveItem(com.google.api.services.drive.model.File item){
-
-        this.title = item.getName();
-        this.originalName = item.getName();
-
-        this.isFolder = item.getFileExtension() == null;
+    public DriveItem(Metadata object){
+        this.title = object.getTitle();
+        this.originalName = object.getOriginalFilename();
+        this.isFolder = object.isFolder();
     }
 
     public String getTitle() {
