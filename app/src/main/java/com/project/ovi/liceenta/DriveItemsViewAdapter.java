@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.project.ovi.liceenta.model.DriveItem;
-import com.project.ovi.liceenta.model.File;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,8 +19,13 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemsViewAd
 
     List<DriveItem> list = Collections.emptyList();
 
-    public DriveItemsViewAdapter(List<DriveItem> list) {
-        this.list = list;
+    public DriveItemsViewAdapter() {
+
+    }
+
+    public void updatePersons(List<DriveItem> items) {
+        this.list = items;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -92,7 +95,7 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemsViewAd
 
         public void bindObject(DriveItem contentObject){
             TextView folderTextView = (TextView) cardView.getChildAt(1);
-            folderTextView.setText(contentObject.getTitle());
+            folderTextView.setText(contentObject.getName());
         }
     }
 

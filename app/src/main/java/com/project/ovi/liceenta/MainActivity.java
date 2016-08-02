@@ -56,6 +56,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab1;
     FloatingActionButton fab2;
     CoordinatorLayout rootLayout;
+    RecyclerView recyclerView;
+    DriveItemsViewAdapter driveItemsViewAdapter;
 
     //Save the FAB's active status
     //false -> fab = close
@@ -97,6 +100,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        driveItemsViewAdapter = new DriveItemsViewAdapter();
+        recyclerView.setAdapter(driveItemsViewAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+
 
         setSupportActionBar(toolbar);
 
@@ -113,7 +122,8 @@ public class MainActivity extends AppCompatActivity
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
 
-        getResultsFromApi();
+
+            getResultsFromApi();
 
 
 
@@ -135,7 +145,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setHideFabOnReciclerViewTouch() {
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+
 
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -260,7 +270,13 @@ public class MainActivity extends AppCompatActivity
         } else if (! isDeviceOnline()) {
             showToastMessage("No network connection available.");
         } else {
-            new MakeRequestTask(mCredential).execute();
+            try {
+                new MakeRequestTask(mCredential).execute();
+//
+
+            } catch (Exception e) {
+                showToastMessage("Error"+e.getMessage());
+            }
         }
     }
 
@@ -495,9 +511,10 @@ public class MainActivity extends AppCompatActivity
      * An asynchronous task that handles the Drive API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+    private class MakeRequestTask extends AsyncTask<Void, Void, List<DriveItem>> {
         private com.google.api.services.drive.Drive mService = null;
         private Exception mLastError = null;
+        private List<DriveItem> rootFolderItems;
 
         public MakeRequestTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
@@ -513,7 +530,7 @@ public class MainActivity extends AppCompatActivity
          * @param params no parameters needed for this task.
          */
         @Override
-        protected List<String> doInBackground(Void... params) {
+        protected List<DriveItem> doInBackground(Void... params) {
             try {
                 return getDataFromApi();
             } catch (Exception e) {
@@ -529,23 +546,25 @@ public class MainActivity extends AppCompatActivity
          *         found.
          * @throws IOException
          */
-        private List<String> getDataFromApi() throws IOException {
+        private List<DriveItem> getDataFromApi() throws IOException {
             // Get a list of up to 10 files.
             List<String> fileInfo = new ArrayList<String>();
+            rootFolderItems = new ArrayList<>();
             FileList result = mService.files().list()
 //                    .setPageSize(10)
-//                    .setFields("nextPageToken, files(id, name)")
+                    .setFields("nextPageToken, files(id, name, fullFileExtension)")
                     .setQ("'root' in parents")
                     .execute();
             List<File> files = result.getFiles();
             if (files != null) {
                 for (File file : files) {
-                    Log.i("Main", file.getName());
-                    fileInfo.add(String.format("%s (%s)\n",
-                            file.getName(), file.getId()));
+                    rootFolderItems.add(new DriveItem(file));
+                    Log.i("Main", file.toString() + file.getFullFileExtension());
+                    fileInfo.add(String.format("%s %s %s \n",
+                            file.getName(), file.getId(), file.getFullFileExtension()));
                 }
             }
-            return fileInfo;
+            return rootFolderItems;
         }
 
 
@@ -556,12 +575,13 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(List<String> output) {
+        protected void onPostExecute(List<DriveItem> output) {
             mProgress.hide();
+            driveItemsViewAdapter.updatePersons(rootFolderItems);
             if (output == null || output.size() == 0) {
                 showToastMessage("No results returned.");
             } else {
-                output.add(0, "Data retrieved using the Drive API:");
+//                output.add(0, "Data retrieved using the Drive API:");
                 showToastMessage(TextUtils.join("\n", output));
             }
         }

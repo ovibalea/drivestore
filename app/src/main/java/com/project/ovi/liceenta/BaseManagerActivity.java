@@ -59,8 +59,6 @@ public abstract class BaseManagerActivity extends Activity implements
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
                     .addScope(Drive.SCOPE_APPFOLDER)
-//                    .addScope(Drive.zzaoE)// required for App Folder sample
-//                    .addScope(Drive.zzaoF)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .build();

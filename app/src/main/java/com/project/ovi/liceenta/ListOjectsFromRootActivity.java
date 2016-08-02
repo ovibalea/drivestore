@@ -88,7 +88,7 @@ public class ListOjectsFromRootActivity extends BaseManagerActivity {
                     Iterator<Metadata> resultsIterator = result.getMetadataBuffer().iterator();
                     while (resultsIterator.hasNext()){
                         Metadata item = resultsIterator.next();
-                        driveItems.add(new DriveItem(item));
+//                        driveItems.add(new DriveItem(item));
                     }
 
 //                    DriveItemsViewAdapter driveItemsViewAdapter = new DriveItemsViewAdapter(driveItems);
