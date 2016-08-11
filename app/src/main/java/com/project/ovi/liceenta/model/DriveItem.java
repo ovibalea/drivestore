@@ -21,6 +21,11 @@ public class DriveItem implements Serializable{
         this.isFolder = object.getFullFileExtension() == null;
     }
 
+    public DriveItem(String message){
+        this.name = message;
+        this.isFolder = false;
+    }
+
     public String getId() {
         return id;
     }

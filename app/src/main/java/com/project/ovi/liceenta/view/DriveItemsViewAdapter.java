@@ -1,4 +1,4 @@
-package com.project.ovi.liceenta;
+package com.project.ovi.liceenta.view;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -7,23 +7,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.project.ovi.liceenta.MainActivity;
+import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.model.DriveItem;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Ovi
  */
-public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemsViewAdapter.View_Holder> {
+public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemsViewAdapter.View_Holder> implements Serializable {
 
     List<DriveItem> list = Collections.emptyList();
+    MainActivity mainActivity;
 
-    public DriveItemsViewAdapter() {
-
+    public DriveItemsViewAdapter(MainActivity mainActivity) {
+        this(Collections.<DriveItem>emptyList(), mainActivity);
     }
 
-    public void updatePersons(List<DriveItem> items) {
+    public DriveItemsViewAdapter(List<DriveItem> driveItems, MainActivity mainActivity) {
+        this.list = driveItems;
+        this.mainActivity = mainActivity;
+    }
+
+    public void updateItemsView(List<DriveItem> items) {
         this.list = items;
         notifyDataSetChanged();
     }
@@ -32,10 +41,12 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemsViewAd
     public int getItemViewType(int position) {
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-        if (list.get(position).isFolder()) {
+        if (list.get(position).getId() != null && list.get(position).isFolder()) {
             return 1;
-        } else {
+        } else if (list.get(position).getId() != null && !list.get(position).isFolder()){
             return 0;
+        } else {
+            return -1;
         }
     }
 
@@ -54,16 +65,28 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemsViewAd
                 holder = new View_Holder(folderView);
                 break;
             default:
-                holder = new View_Holder(new CardView(parent.getContext()));
+                CardView messageView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.message_row_layout, parent, false);
+                holder = new View_Holder(messageView);
+                break;
         }
 
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(View_Holder holder, int position) {
+    public void onBindViewHolder(View_Holder holder, final int position) {
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
         holder.bindObject(list.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DriveItem item = list.get(position);
+                if (item.isFolder()) {
+                    String folderId = item.getId();
+                    mainActivity.populateContent(folderId);
+                }
+            }
+        });
     }
 
     @Override
@@ -95,6 +118,11 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemsViewAd
 
         public void bindObject(DriveItem contentObject){
             TextView folderTextView = (TextView) cardView.getChildAt(1);
+            String objectName = contentObject.getName();
+            if(objectName.length() > 15){
+                objectName = objectName.substring(0, 15);
+                objectName.concat("...");
+            }
             folderTextView.setText(contentObject.getName());
         }
     }

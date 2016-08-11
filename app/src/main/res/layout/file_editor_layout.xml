@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <!--<include layout="@layout/toolbar_layout" />-->
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        app:hintTextAppearance="@style/MyHintText"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/editTextTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.03"
+            android:allowUndo="true"
+            android:editable="true"
+            android:hint="@string/Title"
+            android:maxLength="250"
+            android:theme="@style/MyEditText"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <EditText
+        android:id="@+id/editTextContent"
+        android:layout_width="318dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_weight="0.87"
+        android:gravity="top"
+        android:width="300dp"
+        android:hint="@string/TextHere"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:typeface="normal"
+        android:layout_marginTop="15dp"
+        android:editable="false"
+        android:isScrollContainer="true"
+        android:scrollHorizontally="true"
+        android:scrollbars="vertical|horizontal"
+        android:textAllCaps="false"
+        android:textDirection="locale" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/cancelBtn"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shape" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/saveBtn"
+            android:shadowRadius="5"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/shape" />
+    </LinearLayout>
+
+
+</LinearLayout>

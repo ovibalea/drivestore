@@ -5,4 +5,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="newFileName">New File</string>
+    <string name="Title">Title</string>
+    <string name="TextHere">Enter your text here...</string>
+
+
 </resources>
