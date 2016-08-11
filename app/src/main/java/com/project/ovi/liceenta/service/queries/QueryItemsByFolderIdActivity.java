@@ -15,6 +15,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.project.ovi.liceenta.util.ProjectConstants;
 import com.project.ovi.liceenta.view.DriveItemsViewAdapter;
 import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.model.DriveItem;
@@ -156,7 +157,7 @@ public class QueryItemsByFolderIdActivity extends BaseActivity {
                 } else if (mLastError instanceof UserRecoverableAuthIOException) {
                     startActivityForResult(
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
-                            MainActivity.REQUEST_AUTHORIZATION);
+                            ProjectConstants.REQUEST_AUTHORIZATION);
                 } else {
                     showToast("The following error occurred:\n"
                             + mLastError.getMessage());

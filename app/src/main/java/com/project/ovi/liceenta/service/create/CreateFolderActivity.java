@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,12 +12,11 @@ import android.widget.EditText;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
-import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.service.BaseActivity;
 import com.project.ovi.liceenta.util.ProjectConstants;
@@ -28,72 +25,71 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Created by Ovi on 21/07/16.
+ * Created by Ovi on 11/08/16.
  */
-public class CreateFileActivity extends BaseActivity {
+public class CreateFolderActivity extends BaseActivity {
 
-    private ProgressDialog mProgress;
 
-    private Button cancelBtn;
+    private String parentFolderId;
 
-    private Button saveBtn;
+    private Button createButton;
 
-    private EditText contentEditor;
-
-    private EditText titleEditor;
-
-    private String folderId;
+    private Button cancelButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.file_editor_layout);
+        setContentView(R.layout.create_folder_dialog);
 
-        takeEditors();
+        createButton = (Button) findViewById(R.id.createFolderBtn);
+        cancelButton = (Button) findViewById(R.id.cancelCreateFolderBtn);
         setButtonsActions();
 
     }
 
-    private void takeEditors(){
-        contentEditor = (EditText) findViewById(R.id.editTextContent);
-        titleEditor = (EditText) findViewById(R.id.editTextTitle);
-    }
+    private void setButtonsActions() {
 
-    private void setButtonsActions(){
-        cancelBtn = (Button) findViewById(R.id.cancelBtn);
-        saveBtn = (Button) findViewById(R.id.saveBtn);
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
+        createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finalizeActionWithNoResult();
+                String folderName = getFolderName();
+                new CreateFolderTask(CreateFolderActivity.this, parentFolderId, folderName).execute();
             }
         });
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CreateFileTask(CreateFileActivity.this).execute();
+                finalizeActionWithResult(false);
             }
         });
-    }
-
-    private void finalizeActionWithNoResult() {
-        Intent intent = new Intent();
-        intent.putExtra(ProjectConstants.IS_ITEM_CREATED,false);
-        setResult(ProjectConstants.REQUEST_CREATE_ITEM, intent);
-        finish();
     }
 
     @Override
     public void onBackPressed() {
-        finalizeActionWithNoResult();
+        finalizeActionWithResult(false);
+    }
+
+    private void finalizeActionWithResult(boolean result) {
+        Intent intent = new Intent();
+        intent.putExtra(ProjectConstants.IS_ITEM_CREATED, result);
+        setResult(ProjectConstants.REQUEST_CREATE_ITEM, intent);
+        finish();
+    }
+
+
+    private String getFolderName(){
+        EditText nameEditText = (EditText) findViewById(R.id.editTextFolderTitle);
+        String editFolderName = nameEditText.getText().toString();
+        String folderName = (editFolderName != null && !editFolderName.isEmpty()) ? editFolderName : "New folder";
+        return folderName;
     }
 
     @Override
     public void launchProcessing() {
 
-        folderId = getIntent().getStringExtra(ProjectConstants.PARENT_FOLDER_ID_TAG);
+        parentFolderId = getIntent().getStringExtra(ProjectConstants.PARENT_FOLDER_ID_TAG);
 
     }
 
@@ -101,18 +97,28 @@ public class CreateFileActivity extends BaseActivity {
      * An asynchronous task that handles the Drive API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class CreateFileTask extends AsyncTask<Void, Void, Boolean> {
+    private class CreateFolderTask extends AsyncTask<Void, Void, Boolean> {
 
-        private com.google.api.services.drive.Drive mService = null;
+        private ProgressDialog mProgress;
+
+        private Drive mService = null;
+
         private Exception mLastError = null;
 
-        public CreateFileTask(Context context) {
+        private String parentFolderId;
+
+        private String folderName;
+
+        public CreateFolderTask(Context context, String parentFolderId, String folderName) {
             mProgress = new ProgressDialog(context);
-            mProgress.setMessage("Creating file...");
+            mProgress.setMessage("Creating folder...");
+
+            this.parentFolderId = parentFolderId;
+            this.folderName = folderName;
 
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new com.google.api.services.drive.Drive.Builder(
+            mService = new Drive.Builder(
                     transport, jsonFactory, getCredential())
                     .setApplicationName("Drive API Android Quickstart")
                     .build();
@@ -125,7 +131,7 @@ public class CreateFileActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                return createFileOnFolder();
+                return createFolderOnFolder();
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
@@ -133,30 +139,20 @@ public class CreateFileActivity extends BaseActivity {
             }
         }
 
-        private boolean createFileOnFolder() throws IOException {
+        private boolean createFolderOnFolder() throws IOException {
 
-            String fileName = getFileName();
-            String fileContent = contentEditor.getText().toString();
+            File folderObject = new File();
+            folderObject.setName(folderName);
+            folderObject.setMimeType(ProjectConstants.MIME_FOLDER);
+            folderObject.setParents(Arrays.asList(parentFolderId));
 
-            File body = new File();
-            body.setName(fileName);
-            body.setMimeType(ProjectConstants.MIME_TEXT_PLAIN);
-            body.setParents(Arrays.asList(folderId));
-
-            ByteArrayContent content = ByteArrayContent.fromString(
-                    "text/plain", fileContent);
-
-            File file = mService.files().create(body, content)
+            File folder = mService.files().create(folderObject)
                     .execute();
 
-            return file != null;
+            return folder != null;
         }
 
-        private String getFileName(){
-            String name = titleEditor.getText().toString();
-            String fileName = (name != null && !name.isEmpty()) ? name : "New file";
-            return fileName;
-        }
+
 
 
         @Override
@@ -168,15 +164,12 @@ public class CreateFileActivity extends BaseActivity {
         protected void onPostExecute(Boolean output) {
             mProgress.dismiss();
             if (output == true) {
-                showToast("File created successfully!");
+                showToast("Folder created successfully!");
             } else {
-                showToast("File could not be created!");
+                showToast("Folder could not be created!");
             }
 
-            Intent intent = new Intent();
-            intent.putExtra(ProjectConstants.IS_ITEM_CREATED,output);
-            setResult(ProjectConstants.REQUEST_CREATE_ITEM, intent);
-            finish();
+            finalizeActionWithResult(output);
         }
 
         @Override
@@ -200,4 +193,5 @@ public class CreateFileActivity extends BaseActivity {
             }
         }
     }
+
 }

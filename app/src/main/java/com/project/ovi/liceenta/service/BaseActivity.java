@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
@@ -38,6 +39,8 @@ public abstract class BaseActivity extends Activity implements EasyPermissions.P
 
     private GoogleAccountCredential googleCredentials;
 
+    private GoogleCredential credentials;
+
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { DriveScopes.DRIVE_METADATA_READONLY, DriveScopes.DRIVE,
             DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_SCRIPTS };
@@ -48,6 +51,7 @@ public abstract class BaseActivity extends Activity implements EasyPermissions.P
         googleCredentials = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
+        credentials = new GoogleCredential();
         getResultsFromApi();
     }
 

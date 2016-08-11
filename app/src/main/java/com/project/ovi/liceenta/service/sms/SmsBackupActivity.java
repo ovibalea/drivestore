@@ -24,6 +24,7 @@ import com.google.api.services.drive.model.FileList;
 import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.model.DriveItem;
 import com.project.ovi.liceenta.service.BaseActivity;
+import com.project.ovi.liceenta.util.ProjectConstants;
 
 import android.provider.ContactsContract;
 import android.widget.Toast;
@@ -437,7 +438,7 @@ public class SmsBackupActivity extends BaseActivity {
                 } else if (mLastError instanceof UserRecoverableAuthIOException) {
                     startActivityForResult(
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
-                            MainActivity.REQUEST_AUTHORIZATION);
+                            ProjectConstants.REQUEST_AUTHORIZATION);
                 } else {
                     showToast("The following error occurred:\n"
                             + mLastError.getMessage());

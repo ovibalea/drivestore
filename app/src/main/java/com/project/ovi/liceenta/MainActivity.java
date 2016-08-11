@@ -24,8 +24,10 @@ import android.widget.Toast;
 
 import com.project.ovi.liceenta.model.DriveItem;
 import com.project.ovi.liceenta.service.create.CreateFileActivity;
+import com.project.ovi.liceenta.service.create.CreateFolderActivity;
 import com.project.ovi.liceenta.service.queries.QueryItemsByFolderIdActivity;
 import com.project.ovi.liceenta.service.sms.SmsBackupActivity;
+import com.project.ovi.liceenta.util.ProjectConstants;
 import com.project.ovi.liceenta.view.DriveItemsViewAdapter;
 
 import java.util.ArrayList;
@@ -58,13 +60,6 @@ public class MainActivity extends AppCompatActivity
     private String folderId;
     private Stack<String> foldersVisited;
 
-
-    public static final int REQUEST_AUTHORIZATION = 1001;
-
-    public static final int REQUEST_CONTENT = 1;
-
-    public static final int REQUEST_CREATE_FILE = 2;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(MainActivity.this, QueryItemsByFolderIdActivity.class);
         intent.putExtra(QueryItemsByFolderIdActivity.FOLDER_ID, folderId);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivityForResult(intent, REQUEST_CONTENT);
+        startActivityForResult(intent, ProjectConstants.REQUEST_CONTENT);
     }
 
 
@@ -160,8 +155,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), CreateFolderActivity.class);
+                intent.putExtra(ProjectConstants.PARENT_FOLDER_ID_TAG, folderId);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                startActivityForResult(intent, ProjectConstants.REQUEST_CREATE_ITEM);
 
             }
         });
@@ -170,9 +166,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), CreateFileActivity.class);
-                intent.putExtra(CreateFileActivity.FOLDER_ID_TAG, folderId);
+                intent.putExtra(ProjectConstants.PARENT_FOLDER_ID_TAG, folderId);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(intent, REQUEST_CREATE_FILE);
+                startActivityForResult(intent, ProjectConstants.REQUEST_CREATE_ITEM);
 
 
             }
@@ -222,15 +218,15 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_CONTENT:
+            case ProjectConstants.REQUEST_CONTENT:
                 ArrayList<DriveItem> output = (ArrayList<DriveItem>) data.getSerializableExtra(QueryItemsByFolderIdActivity.VIEW_ADAPTER_ITEMS);
                 driveItemsViewAdapter.updateItemsView(output);
 
                 recyclerView.setAdapter(driveItemsViewAdapter);
                 break;
-            case REQUEST_CREATE_FILE:
-                boolean isFileCreated = data.getBooleanExtra(CreateFileActivity.IS_FILE_CREATED, true);
-                if (isFileCreated) {
+            case ProjectConstants.REQUEST_CREATE_ITEM:
+                boolean isItemCreated = data.getBooleanExtra(ProjectConstants.IS_ITEM_CREATED, true);
+                if (isItemCreated) {
                     populateContent(folderId);
                 }
                 break;

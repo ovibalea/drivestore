@@ -6,8 +6,6 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <!--<include layout="@layout/toolbar_layout" />-->
-
     <android.support.design.widget.TextInputLayout
         android:layout_width="330dp"
         android:layout_height="wrap_content"
@@ -47,7 +45,8 @@
         android:scrollHorizontally="true"
         android:scrollbars="vertical|horizontal"
         android:textAllCaps="false"
-        android:textDirection="locale" />
+        android:textDirection="locale"
+        android:elegantTextHeight="true" />
 
     <LinearLayout
         android:orientation="horizontal"

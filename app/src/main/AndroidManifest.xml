@@ -32,10 +32,12 @@
         </activity>
 
         <activity android:name=".service.create.CreateFileActivity"
+            android:theme="@style/AppTheme"
             android:finishOnTaskLaunch="true"/>
-        <activity android:name=".CreateFolderActivity"
-            android:finishOnTaskLaunch="true"
-            />
+
+        <activity android:name=".service.create.CreateFolderActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:finishOnTaskLaunch="true"/>
 
         <activity android:name=".service.sms.SmsBackupActivity"
             android:finishOnTaskLaunch="true"/>

@@ -1,6 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:id="@+id/createFolderDialog"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/AppTheme.Dialog">
+
+
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="153dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        app:hintTextAppearance="@style/MyHintText"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/view"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="15dp">
+
+        <EditText
+            android:id="@+id/editTextFolderTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.03"
+            android:allowUndo="true"
+            android:editable="true"
+            android:hint="@string/folderName"
+            android:maxLength="250"
+            android:theme="@style/MyEditText"
+            android:layout_below="@+id/view"
+            android:layout_centerHorizontal="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/linearLayout">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create"
+            android:id="@+id/createFolderBtn"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/editTextFolderTitle"
+            android:layout_toRightOf="@+id/linearLayout"
+            android:layout_toEndOf="@+id/linearLayout"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shape"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/cancelCreateFolderBtn"
+            android:layout_below="@+id/editTextFolderTitle"
+            android:layout_toRightOf="@+id/view"
+            android:layout_toEndOf="@+id/view"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/shape"/>
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>
