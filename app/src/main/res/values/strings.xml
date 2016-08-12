@@ -12,5 +12,9 @@
 
     <string name = "folderName">Folder name</string>
 
+    <string name = "download">Download</string>
+    <string name = "delete">Delete</string>
+    <string name = "infos">Show Metadata</string>
+
 
 </resources>

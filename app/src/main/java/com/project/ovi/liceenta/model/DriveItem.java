@@ -1,8 +1,12 @@
 package com.project.ovi.liceenta.model;
 
+import com.google.api.client.util.DateTime;
 import com.google.api.services.drive.model.File;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Ovi on 27/07/16.
@@ -13,17 +17,12 @@ public class DriveItem implements Serializable{
 
     private String name;
 
-    private boolean isFolder;
+    private DateTime creationDate;
 
-    public DriveItem(File object){
-        this.id = object.getId();
-        this.name = object.getName();
-        this.isFolder = object.getFullFileExtension() == null;
-    }
-
-    public DriveItem(String message){
-        this.name = message;
-        this.isFolder = false;
+    public DriveItem(String id, String name, DateTime createdTime){
+        this.id = id;
+        this.name = name;
+        this.creationDate = createdTime;
     }
 
     public String getId() {
@@ -42,11 +41,10 @@ public class DriveItem implements Serializable{
         this.name = name;
     }
 
-    public boolean isFolder() {
-        return isFolder;
+    public String getInfo(){
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy mm:ss");
+        Date date = new Date(creationDate.getValue());
+        return dateFormat.format(date);
     }
 
-    public void setIsFolder(boolean isFolder) {
-        this.isFolder = isFolder;
-    }
 }

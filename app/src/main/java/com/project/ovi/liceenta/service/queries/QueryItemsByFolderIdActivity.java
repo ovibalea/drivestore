@@ -15,9 +15,11 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.project.ovi.liceenta.model.DriveFile;
+import com.project.ovi.liceenta.model.DriveFolder;
+import com.project.ovi.liceenta.model.MessageItem;
 import com.project.ovi.liceenta.util.ProjectConstants;
 import com.project.ovi.liceenta.view.DriveItemsViewAdapter;
-import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.model.DriveItem;
 import com.project.ovi.liceenta.service.BaseActivity;
 
@@ -30,7 +32,7 @@ import java.util.List;
  */
 public class QueryItemsByFolderIdActivity extends BaseActivity {
 
-    private static String TAG = "SmsBackupActivity";
+    private static String TAG = "QueryItemsByFolder";
 
     public static final String FOLDER_ID = "folderId";
 
@@ -40,8 +42,6 @@ public class QueryItemsByFolderIdActivity extends BaseActivity {
 
     private String folderId;
 
-    private ProgressDialog mProgress;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +50,6 @@ public class QueryItemsByFolderIdActivity extends BaseActivity {
 
     @Override
     public void launchProcessing() {
-            mProgress = new ProgressDialog(this);
-            mProgress.setMessage("Calling Drive API ...");
 
             folderId = getIntent().getStringExtra(FOLDER_ID);
             new RequestItemsTask(this).execute();
@@ -65,6 +63,7 @@ public class QueryItemsByFolderIdActivity extends BaseActivity {
         private com.google.api.services.drive.Drive mService = null;
         private Exception mLastError = null;
         private ArrayList<DriveItem> rootFolderItems;
+        private ProgressDialog mProgress;
 
         public RequestItemsTask(Context context) {
 
@@ -106,21 +105,25 @@ public class QueryItemsByFolderIdActivity extends BaseActivity {
             rootFolderItems = new ArrayList<DriveItem>();
             FileList result = mService.files().list()
 //                    .setPageSize(10)
-                    .setFields("nextPageToken, files(id, name, fullFileExtension, trashed)")
+                    .setFields("nextPageToken, files(id, name, fullFileExtension, trashed, createdTime, size)")
                     .setQ("'" + folderId + "' in parents and trashed != true")
                     .execute();
             List<File> files = result.getFiles();
             if (files != null) {
                 for (File file : files) {
-
-                    rootFolderItems.add(new DriveItem(file));
-                    Log.i("Main", file.toString() + file.getFullFileExtension());
-                    fileInfo.add(String.format("%s %s %s \n",
-                            file.getName(), file.getId(), file.getFullFileExtension()));
+                    DriveItem item;
+                    if(file.getFullFileExtension() == null) {
+                        FileList children = mService.files().list().setQ("'"+file.getId()+"' in parents").execute();
+                        item = new DriveFolder(file, children.getFiles().size());
+                    } else {
+                        item = new DriveFile(file);
+                    }
+                    rootFolderItems.add(item);
+                    Log.i(TAG, file.toString() + file.getFullFileExtension());
                 }
             }
             if(rootFolderItems.size() == 0) {
-                rootFolderItems.add(new DriveItem("No items!"));
+                rootFolderItems.add(new MessageItem());
             }
             return rootFolderItems;
         }

@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_sms_backup"
-            android:icon="@drawable/ic_mail_black_24dp"
+            android:icon="@drawable/backup_sms_icon"
             android:title="Backup SMS" />
         <item
             android:id="@+id/nav_sms_restore"
-            android:icon="@drawable/ic_drafts_black_24dp"
+            android:icon="@drawable/restore_sms_icon"
             android:title="SMS Restore" />
         <item
             android:id="@+id/nav_slideshow"

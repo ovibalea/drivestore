@@ -32,8 +32,6 @@ import java.util.Arrays;
  */
 public class CreateFileActivity extends BaseActivity {
 
-    private ProgressDialog mProgress;
-
     private Button cancelBtn;
 
     private Button saveBtn;
@@ -105,6 +103,7 @@ public class CreateFileActivity extends BaseActivity {
 
         private com.google.api.services.drive.Drive mService = null;
         private Exception mLastError = null;
+        private ProgressDialog mProgress;
 
         public CreateFileTask(Context context) {
             mProgress = new ProgressDialog(context);
