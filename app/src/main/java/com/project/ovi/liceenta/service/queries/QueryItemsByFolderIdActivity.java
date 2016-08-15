@@ -62,7 +62,6 @@ public class QueryItemsByFolderIdActivity extends BaseActivity {
     private class RequestItemsTask extends AsyncTask<Void, Void, ArrayList<DriveItem>> {
         private com.google.api.services.drive.Drive mService = null;
         private Exception mLastError = null;
-        private ArrayList<DriveItem> rootFolderItems;
         private ProgressDialog mProgress;
 
         public RequestItemsTask(Context context) {
@@ -101,31 +100,17 @@ public class QueryItemsByFolderIdActivity extends BaseActivity {
          */
         private ArrayList<DriveItem> getDataFromApi() throws IOException {
             // Get a list of up to 10 files.
-            List<String> fileInfo = new ArrayList<String>();
-            rootFolderItems = new ArrayList<DriveItem>();
             FileList result = mService.files().list()
-//                    .setPageSize(10)
-                    .setFields("nextPageToken, files(id, name, fullFileExtension, trashed, createdTime, size)")
+                    .setFields("nextPageToken, files(id, name, fullFileExtension, trashed, createdTime, size, mimeType)")
                     .setQ("'" + folderId + "' in parents and trashed != true")
                     .execute();
-            List<File> files = result.getFiles();
-            if (files != null) {
-                for (File file : files) {
-                    DriveItem item;
-                    if(file.getFullFileExtension() == null) {
-                        FileList children = mService.files().list().setQ("'"+file.getId()+"' in parents").execute();
-                        item = new DriveFolder(file, children.getFiles().size());
-                    } else {
-                        item = new DriveFile(file);
-                    }
-                    rootFolderItems.add(item);
-                    Log.i(TAG, file.toString() + file.getFullFileExtension());
-                }
+
+            ArrayList<DriveItem> folderItems = ItemsWrapperFactory.createDriveItemsArray(result, mService);
+
+            if(folderItems.size() == 0) {
+                folderItems.add(new MessageItem());
             }
-            if(rootFolderItems.size() == 0) {
-                rootFolderItems.add(new MessageItem());
-            }
-            return rootFolderItems;
+            return folderItems;
         }
 
 

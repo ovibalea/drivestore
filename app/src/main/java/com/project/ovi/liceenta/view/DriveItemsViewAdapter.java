@@ -89,7 +89,7 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemViewHol
         holder.cardView.findViewById(R.id.itemMenuView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupMenu(v);
+                showPopupMenu(v, list.get(position));
             }
         });
     }
@@ -97,13 +97,13 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemViewHol
     /**
      * Showing popup menu when tapping on 3 dots
      */
-    private void showPopupMenu(View view) {
+    private void showPopupMenu(View view, DriveItem driveItem) {
         // inflate menu
         PopupMenu popup = new PopupMenu(mainActivity, view);
         forceShowIcons(popup);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.item_menu, popup.getMenu());
-        popup.setOnMenuItemClickListener(new MyMenuItemClickListener(mainActivity));
+        popup.setOnMenuItemClickListener(new MyMenuItemClickListener(mainActivity, driveItem));
         popup.show();
     }
 

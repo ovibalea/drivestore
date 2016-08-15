@@ -10,6 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -17,6 +18,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'http://guardian.github.com/maven/repo-releases' }
 }
 
 dependencies {
@@ -41,5 +47,11 @@ dependencies {
 
     compile 'com.google.api-client:google-api-client:1.22.0'
     compile 'com.google.oauth-client:google-oauth-client-jetty:1.22.0'
+
+    compile ('net.rdrei.android.dirchooser:library:3.0@aar') {
+        transitive = true;
+    }
+
+    compile group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.11.0-beta'
 
 }

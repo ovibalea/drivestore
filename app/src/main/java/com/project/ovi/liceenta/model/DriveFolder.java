@@ -10,7 +10,7 @@ public class DriveFolder extends DriveItem {
     private int nrOfItems;
 
     public DriveFolder(File folder, int childrenNo) {
-        super(folder.getId(), folder.getName(), folder.getCreatedTime());
+        super(folder.getId(), folder.getName(), folder.getMimeType(), folder.getCreatedTime());
         this.nrOfItems = childrenNo;
     }
 

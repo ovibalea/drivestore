@@ -8,7 +8,7 @@ import com.google.api.client.util.DateTime;
 public class MessageItem extends DriveItem {
 
     public MessageItem() {
-        super(null, "No Items!", null);
+        super(null, "No Items!", null, null);
     }
 
     @Override

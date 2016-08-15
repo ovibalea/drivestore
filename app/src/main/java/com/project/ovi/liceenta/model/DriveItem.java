@@ -17,11 +17,14 @@ public class DriveItem implements Serializable{
 
     private String name;
 
+    private String mimeType;
+
     private DateTime creationDate;
 
-    public DriveItem(String id, String name, DateTime createdTime){
+    public DriveItem(String id, String name, String mimeType, DateTime createdTime){
         this.id = id;
         this.name = name;
+        this.mimeType = mimeType;
         this.creationDate = createdTime;
     }
 
@@ -39,6 +42,14 @@ public class DriveItem implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
     public String getInfo(){

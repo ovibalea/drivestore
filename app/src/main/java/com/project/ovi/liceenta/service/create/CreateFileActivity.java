@@ -139,7 +139,7 @@ public class CreateFileActivity extends BaseActivity {
 
             File body = new File();
             body.setName(fileName);
-            body.setMimeType(ProjectConstants.MIME_TEXT_PLAIN);
+            body.setMimeType("application/vnd.google-apps.file");
             body.setParents(Arrays.asList(folderId));
 
             ByteArrayContent content = ByteArrayContent.fromString(

@@ -39,11 +39,9 @@ public abstract class BaseActivity extends Activity implements EasyPermissions.P
 
     private GoogleAccountCredential googleCredentials;
 
-    private GoogleCredential credentials;
-
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { DriveScopes.DRIVE_METADATA_READONLY, DriveScopes.DRIVE,
-            DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_SCRIPTS };
+            DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_SCRIPTS , DriveScopes.DRIVE_METADATA, DriveScopes.DRIVE_PHOTOS_READONLY, DriveScopes.DRIVE_READONLY};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,6 @@ public abstract class BaseActivity extends Activity implements EasyPermissions.P
         googleCredentials = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
-        credentials = new GoogleCredential();
         getResultsFromApi();
     }
 
