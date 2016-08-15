@@ -1,4 +1,4 @@
-package com.project.ovi.liceenta.service.queries;
+package com.project.ovi.liceenta.util;
 
 import android.util.Log;
 
@@ -10,7 +10,6 @@ import com.project.ovi.liceenta.model.DriveFolder;
 import com.project.ovi.liceenta.model.DriveItem;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +25,12 @@ public class ItemsWrapperFactory {
 
     public static ArrayList<DriveItem> createDriveItemsArray(FileList itemsList, Drive dService) throws IOException {
         ArrayList<DriveItem> driveItems = new ArrayList<>();
+
         List<File> files = itemsList.getFiles();
         if (files != null) {
             for (File file : files) {
                 DriveItem item;
-                if(file.getFullFileExtension() == null) {
+                if(file.getMimeType().equals(ProjectConstants.MIMETYPE_FOLDER)) {
                     FileList children = dService.files().list().setQ("'"+file.getId()+"' in parents").execute();
                     item = new DriveFolder(file, children.getFiles().size());
                 } else {

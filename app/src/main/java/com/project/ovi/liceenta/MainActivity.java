@@ -23,8 +23,10 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.project.ovi.liceenta.model.DriveItem;
-import com.project.ovi.liceenta.service.create.CreateFileActivity;
-import com.project.ovi.liceenta.service.create.CreateFolderActivity;
+import com.project.ovi.liceenta.service.AuthenticateActivity;
+import com.project.ovi.liceenta.service.DriveServiceManager;
+import com.project.ovi.liceenta.service.activities.CreateFileActivity;
+import com.project.ovi.liceenta.service.activities.CreateFolderActivity;
 import com.project.ovi.liceenta.service.queries.QueryItemsByFolderIdActivity;
 import com.project.ovi.liceenta.service.sms.SmsBackupActivity;
 import com.project.ovi.liceenta.util.ProjectConstants;
@@ -38,6 +40,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    boolean isAuthenticated;
 
     //Animations
     Animation show_fab_1;
@@ -80,17 +83,29 @@ public class MainActivity extends AppCompatActivity
 
         setHideFabOnReciclerViewTouch();
 
+        requestAuthentication();
+
+
         populateContent("root");
+
 
     }
 
+    private void requestAuthentication() {
+        Intent authentication = new Intent(MainActivity.this, AuthenticateActivity.class);
+        authentication.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivityForResult(authentication, ProjectConstants.AUTHENTICATION_REQUEST);
+    }
+
     public void populateContent(String folderId) {
-        this.folderId = folderId;
-        this.foldersVisited.push(folderId);
-        Intent intent = new Intent(MainActivity.this, QueryItemsByFolderIdActivity.class);
-        intent.putExtra(QueryItemsByFolderIdActivity.FOLDER_ID, folderId);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivityForResult(intent, ProjectConstants.REQUEST_CONTENT);
+        if (DriveServiceManager.getInstance() != null) {
+            this.folderId = folderId;
+            this.foldersVisited.push(folderId);
+            Intent intent = new Intent(MainActivity.this, QueryItemsByFolderIdActivity.class);
+            intent.putExtra(QueryItemsByFolderIdActivity.FOLDER_ID, folderId);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, ProjectConstants.REQUEST_CONTENT);
+        }
     }
 
 
@@ -218,6 +233,14 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case ProjectConstants.AUTHENTICATION_REQUEST:
+                isAuthenticated = data.getBooleanExtra(ProjectConstants.IS_AUTHENTICATED, false);
+                if (isAuthenticated) {
+                    populateContent("root");
+                } else {
+                    requestAuthentication();
+                }
+                break;
             case ProjectConstants.REQUEST_CONTENT:
                 ArrayList<DriveItem> output = (ArrayList<DriveItem>) data.getSerializableExtra(QueryItemsByFolderIdActivity.VIEW_ADAPTER_ITEMS);
                 driveItemsViewAdapter.updateItemsView(output);
@@ -227,6 +250,12 @@ public class MainActivity extends AppCompatActivity
             case ProjectConstants.REQUEST_CREATE_ITEM:
                 boolean isItemCreated = data.getBooleanExtra(ProjectConstants.IS_ITEM_CREATED, true);
                 if (isItemCreated) {
+                    populateContent(folderId);
+                }
+                break;
+            case ProjectConstants.REQUEST_PROCESS_ITEM:
+                boolean isItemProcessed = data.getBooleanExtra(ProjectConstants.IS_ITEM_PROCESSED, true);
+                if (isItemProcessed) {
                     populateContent(folderId);
                 }
                 break;

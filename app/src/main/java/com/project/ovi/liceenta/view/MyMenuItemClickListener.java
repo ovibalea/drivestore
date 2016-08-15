@@ -1,6 +1,5 @@
 package com.project.ovi.liceenta.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
@@ -9,8 +8,8 @@ import android.widget.Toast;
 import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.model.DriveItem;
-import com.project.ovi.liceenta.service.create.CreateFolderActivity;
-import com.project.ovi.liceenta.service.create.DownloadItemActivity;
+import com.project.ovi.liceenta.service.activities.DeleteItemActivity;
+import com.project.ovi.liceenta.service.activities.DownloadItemActivity;
 import com.project.ovi.liceenta.util.ProjectConstants;
 
 /**
@@ -40,7 +39,10 @@ class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
                 mainActivity.startActivity(intent);
                 return true;
             case R.id.action_delete:
-                Toast.makeText(mainActivity, "Delete action", Toast.LENGTH_SHORT).show();
+                Intent deleteItent = new Intent(mainActivity, DeleteItemActivity.class);
+                deleteItent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                deleteItent.putExtra(ProjectConstants.DELETE_ITEM_ID_TAG, driveItem.getId());
+                mainActivity.startActivityForResult(deleteItent, ProjectConstants.REQUEST_PROCESS_ITEM);
                 return true;
             default:
         }

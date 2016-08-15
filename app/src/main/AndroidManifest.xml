@@ -34,15 +34,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".service.create.CreateFileActivity"
+        <activity android:name=".service.activities.CreateFileActivity"
             android:theme="@style/AppTheme"
             android:finishOnTaskLaunch="true"/>
 
-        <activity android:name=".service.create.CreateFolderActivity"
+        <activity android:name=".service.activities.CreateFolderActivity"
             android:theme="@style/AppTheme.Dialog"
             android:finishOnTaskLaunch="true"/>
 
-        <activity android:name=".service.create.DownloadItemActivity"
+        <activity android:name=".service.activities.DownloadItemActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:finishOnTaskLaunch="true"/>
+
+        <activity android:name=".service.activities.DeleteItemActivity"
             android:theme="@style/AppTheme.Dialog"
             android:finishOnTaskLaunch="true"/>
 
@@ -50,6 +54,9 @@
             android:finishOnTaskLaunch="true"/>
 
         <activity android:name=".service.queries.QueryItemsByFolderIdActivity"
+            android:finishOnTaskLaunch="true"/>
+
+        <activity android:name=".service.AuthenticateActivity"
             android:finishOnTaskLaunch="true"/>
 
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for

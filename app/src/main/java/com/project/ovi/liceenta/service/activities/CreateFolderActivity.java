@@ -1,4 +1,4 @@
-package com.project.ovi.liceenta.service.create;
+package com.project.ovi.liceenta.service.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,16 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.service.BaseActivity;
+import com.project.ovi.liceenta.service.DriveServiceManager;
 import com.project.ovi.liceenta.util.ProjectConstants;
 
 import java.io.IOException;
@@ -28,7 +25,6 @@ import java.util.Arrays;
  * Created by Ovi on 11/08/16.
  */
 public class CreateFolderActivity extends BaseActivity {
-
 
     private String parentFolderId;
 
@@ -41,15 +37,15 @@ public class CreateFolderActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_folder_dialog);
 
-        createButton = (Button) findViewById(R.id.createFolderBtn);
-        cancelButton = (Button) findViewById(R.id.cancelCreateFolderBtn);
         setButtonsActions();
+
+        parentFolderId = getIntent().getStringExtra(ProjectConstants.PARENT_FOLDER_ID_TAG);
 
     }
 
     private void setButtonsActions() {
-
-
+        createButton = (Button) findViewById(R.id.createFolderBtn);
+        cancelButton = (Button) findViewById(R.id.cancelCreateFolderBtn);
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,12 +82,6 @@ public class CreateFolderActivity extends BaseActivity {
         return folderName;
     }
 
-    @Override
-    public void launchProcessing() {
-
-        parentFolderId = getIntent().getStringExtra(ProjectConstants.PARENT_FOLDER_ID_TAG);
-
-    }
 
     /**
      * An asynchronous task that handles the Drive API call.
@@ -116,12 +106,7 @@ public class CreateFolderActivity extends BaseActivity {
             this.parentFolderId = parentFolderId;
             this.folderName = folderName;
 
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new Drive.Builder(
-                    transport, jsonFactory, getCredential())
-                    .setApplicationName("Drive API Android Quickstart")
-                    .build();
+            mService = DriveServiceManager.getInstance().getService();
         }
 
         /**
@@ -143,7 +128,7 @@ public class CreateFolderActivity extends BaseActivity {
 
             File folderObject = new File();
             folderObject.setName(folderName);
-            folderObject.setMimeType(ProjectConstants.MIME_FOLDER);
+            folderObject.setMimeType(ProjectConstants.MIMETYPE_FOLDER);
             folderObject.setParents(Arrays.asList(parentFolderId));
 
             File folder = mService.files().create(folderObject)
@@ -151,9 +136,6 @@ public class CreateFolderActivity extends BaseActivity {
 
             return folder != null;
         }
-
-
-
 
         @Override
         protected void onPreExecute() {

@@ -1,49 +1,33 @@
-package com.project.ovi.liceenta.service.create;
+package com.project.ovi.liceenta.service.activities;
 
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-
 import com.google.api.services.drive.Drive;
 import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.model.DriveFile;
-import com.project.ovi.liceenta.model.DriveItem;
 import com.project.ovi.liceenta.service.BaseActivity;
+import com.project.ovi.liceenta.service.DriveServiceManager;
 import com.project.ovi.liceenta.util.ProjectConstants;
 
 import net.rdrei.android.dirchooser.DirectoryChooserConfig;
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
 
-import org.mortbay.jetty.MimeTypes;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 /**
  * Created by Ovi on 12/08/16.
@@ -63,20 +47,16 @@ public class DownloadItemActivity extends BaseActivity implements DirectoryChoos
         super.onCreate(savedInstanceState);
         setContentView(R.layout.download_item_dialog);
 
-        yesButton = (Button) findViewById(R.id.yesDownloadBtn);
-        noButton = (Button) findViewById(R.id.noDownloadBtn);
+
         setButtonsActions();
 
-    }
-
-    @Override
-    public void launchProcessing() {
         Intent requestIntent = getIntent();
-
         driveFile = (DriveFile) requestIntent.getSerializableExtra(ProjectConstants.DOWNLOAD_ITEM_ID_TAG);
     }
 
     private void setButtonsActions(){
+        yesButton = (Button) findViewById(R.id.yesDownloadBtn);
+        noButton = (Button) findViewById(R.id.noDownloadBtn);
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,12 +110,7 @@ public class DownloadItemActivity extends BaseActivity implements DirectoryChoos
             this.destinationPath = destinationPath;
             this.driveFile = driveFile;
 
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, getCredential())
-                    .setApplicationName("Drive API Android Quickstart")
-                    .build();
+            mService = DriveServiceManager.getInstance().getService();
         }
 
         /**
@@ -251,10 +226,7 @@ public class DownloadItemActivity extends BaseActivity implements DirectoryChoos
             } else {
                 showToast("File could not be created!");
             }
-
-//            Intent intent = new Intent();
-//            intent.putExtra(ProjectConstants.IS_ITEM_CREATED,output);
-//            setResult(ProjectConstants.REQUEST_CREATE_ITEM, intent);
+            
             finish();
         }
 

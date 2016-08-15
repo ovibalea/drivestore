@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:src="@drawable/file2"
+            android:src="@drawable/unknow_icon"
             android:layout_gravity="center_horizontal" />
 
         <LinearLayout
@@ -34,7 +34,7 @@
                 android:text="Recycler View"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:id="@+id/infosTextView"
@@ -43,7 +43,7 @@
                 android:text="Recycler View"
                 android:gravity="right"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="0dp" />
         </LinearLayout>
 
         <ImageView

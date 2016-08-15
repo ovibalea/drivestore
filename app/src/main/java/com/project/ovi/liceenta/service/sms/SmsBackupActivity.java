@@ -7,27 +7,18 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.ByteArrayContent;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.model.DriveItem;
 import com.project.ovi.liceenta.service.BaseActivity;
+import com.project.ovi.liceenta.service.DriveServiceManager;
 import com.project.ovi.liceenta.util.ProjectConstants;
-
-import android.provider.ContactsContract;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +26,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,14 +53,6 @@ public class SmsBackupActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-    }
-
-
-    @Override
-    public void launchProcessing() {
-//        this.mProgress = ProgressDialog.show(this, "Fancy App",
-//                "Loading...Please wait...", true, false);
         new BackupRequestTask().execute();
     }
 
@@ -324,13 +306,7 @@ public class SmsBackupActivity extends BaseActivity {
             mProgress = new ProgressDialog(getApplicationContext());
             mProgress.setMessage("Calling Drive API ...");
 
-
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, getCredential())
-                    .setApplicationName("Drive API Android Quickstart")
-                    .build();
+            mService = DriveServiceManager.getInstance().getService();
         }
 
         /**
@@ -363,9 +339,6 @@ public class SmsBackupActivity extends BaseActivity {
                 Log.i(TAG, messages.toString());
 
                 // Create sms backup Folder
-
-                if (mService == null)
-                    getResultsFromApi();
 
 
                 File folder = createBackupFolder(mService);

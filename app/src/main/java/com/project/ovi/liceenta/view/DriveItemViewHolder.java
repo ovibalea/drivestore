@@ -56,10 +56,8 @@ public class DriveItemViewHolder extends RecyclerView.ViewHolder {
 
     private void setCardImage(DriveItem contentObject) {
         ImageView imageView = (ImageView) cardView.findViewById(R.id.imageView);
-        if (contentObject instanceof DriveFolder) {
-            imageView.setImageResource(R.drawable.folder2);
-        } else if (contentObject instanceof DriveFile) {
-            imageView.setImageResource(R.drawable.file2);
+        if (contentObject instanceof DriveFolder || contentObject instanceof DriveFile) {
+            imageView.setImageResource(contentObject.getIconId());
         } else {
             imageView.setImageResource(R.drawable.warning2);
         }

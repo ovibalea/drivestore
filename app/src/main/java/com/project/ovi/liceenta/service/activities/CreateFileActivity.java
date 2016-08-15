@@ -1,27 +1,21 @@
-package com.project.ovi.liceenta.service.create;
+package com.project.ovi.liceenta.service.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.ByteArrayContent;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.model.File;
-import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.service.BaseActivity;
+import com.project.ovi.liceenta.service.DriveServiceManager;
 import com.project.ovi.liceenta.util.ProjectConstants;
 
 import java.io.IOException;
@@ -47,12 +41,13 @@ public class CreateFileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_editor_layout);
 
-        takeEditors();
+        setEditors();
         setButtonsActions();
 
+        folderId = getIntent().getStringExtra(ProjectConstants.PARENT_FOLDER_ID_TAG);
     }
 
-    private void takeEditors(){
+    private void setEditors(){
         contentEditor = (EditText) findViewById(R.id.editTextContent);
         titleEditor = (EditText) findViewById(R.id.editTextTitle);
     }
@@ -88,13 +83,6 @@ public class CreateFileActivity extends BaseActivity {
         finalizeActionWithNoResult();
     }
 
-    @Override
-    public void launchProcessing() {
-
-        folderId = getIntent().getStringExtra(ProjectConstants.PARENT_FOLDER_ID_TAG);
-
-    }
-
     /**
      * An asynchronous task that handles the Drive API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
@@ -109,12 +97,7 @@ public class CreateFileActivity extends BaseActivity {
             mProgress = new ProgressDialog(context);
             mProgress.setMessage("Creating file...");
 
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, getCredential())
-                    .setApplicationName("Drive API Android Quickstart")
-                    .build();
+            mService = DriveServiceManager.getInstance().getService();
         }
 
         /**
