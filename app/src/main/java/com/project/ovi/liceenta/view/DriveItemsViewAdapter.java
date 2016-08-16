@@ -1,5 +1,6 @@
 package com.project.ovi.liceenta.view;
 
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.model.DriveFolder;
 import com.project.ovi.liceenta.model.DriveItem;
+import com.project.ovi.liceenta.service.activities.BookmarkItemActivity;
+import com.project.ovi.liceenta.util.ProjectConstants;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -90,6 +93,17 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemViewHol
             @Override
             public void onClick(View v) {
                 showPopupMenu(v, list.get(position));
+            }
+        });
+
+        holder.cardView.findViewById(R.id.bookmarkView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DriveItem item = list.get(position);
+                Intent bookmarkIntent = new Intent(mainActivity, BookmarkItemActivity.class);
+                bookmarkIntent.putExtra(ProjectConstants.ITEM_ID_TAG, item.getId());
+                bookmarkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                mainActivity.startActivityForResult(bookmarkIntent, ProjectConstants.REQUEST_PROCESS_ITEM);
             }
         });
     }

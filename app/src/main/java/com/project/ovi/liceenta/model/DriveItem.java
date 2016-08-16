@@ -1,8 +1,8 @@
 package com.project.ovi.liceenta.model;
 
 import com.google.api.client.util.DateTime;
-import com.google.api.services.drive.model.File;
 import com.project.ovi.liceenta.util.GoogleTypesUtil;
+import com.project.ovi.liceenta.util.ProjectConstants;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -25,12 +25,17 @@ public class DriveItem implements Serializable{
 
     private Long iconId;
 
-    public DriveItem(String id, String name, String mimeType, DateTime createdTime){
+    private boolean isBookmarked = false;
+
+    public DriveItem(String id, String name, String mimeType, DateTime createdTime, Map<String, String> properties){
         this.id = id;
         this.name = name;
         this.mimeType = mimeType;
         this.creationDate = createdTime;
         this.iconId = GoogleTypesUtil.getIconId(mimeType);
+        if(properties != null && properties.get(ProjectConstants.IS_BOOKMARKED) != null) {
+            this.isBookmarked = properties.get(ProjectConstants.IS_BOOKMARKED).equals("1");
+        }
     }
 
     public String getId() {
@@ -65,8 +70,16 @@ public class DriveItem implements Serializable{
         this.iconId = iconId;
     }
 
+    public boolean isBookmarked() {
+        return isBookmarked;
+    }
+
+    public void setIsBookmarked(boolean isBookmarked) {
+        this.isBookmarked = isBookmarked;
+    }
+
     public String getInfo(){
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
         Date date = new Date(creationDate.getValue());
         return dateFormat.format(date);
     }

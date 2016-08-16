@@ -17,6 +17,8 @@ public class ProjectConstants {
 
     public static final String DOWNLOAD_ITEM_ID_TAG = "downloadItemIdTag";
 
+    public static final String ITEM_ID_TAG = "itemIdTag";
+
     public static final String DELETE_ITEM_ID_TAG = "downloadItemIdTag";
 
     public static final String IS_ITEM_CREATED = "isItemCreated";
@@ -32,9 +34,9 @@ public class ProjectConstants {
 
     public static final String MIME_TYPE_TAG = "mimeTypeTag";
 
-    public static final String ITEM_FIELDS = "id, name, fullFileExtension, trashed, createdTime, size, mimeType, fileExtension";
+    public static final String ITEM_FIELDS = "id, name, fullFileExtension, trashed, createdTime, size, mimeType, fileExtension, properties";
 
-
+    public static final String IS_BOOKMARKED = "isBookmarked";
 
 
 }

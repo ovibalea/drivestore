@@ -13,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +34,7 @@ import com.project.ovi.liceenta.service.sms.SmsBackupActivity;
 import com.project.ovi.liceenta.util.ProjectConstants;
 import com.project.ovi.liceenta.view.DriveItemsViewAdapter;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -39,6 +42,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG = "MainActivity";
 
     boolean isAuthenticated;
 
@@ -243,7 +248,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case ProjectConstants.REQUEST_CONTENT:
                 ArrayList<DriveItem> output = (ArrayList<DriveItem>) data.getSerializableExtra(QueryItemsByFolderIdActivity.VIEW_ADAPTER_ITEMS);
-                driveItemsViewAdapter.updateItemsView(output);
+
+                if(output != null){
+                    driveItemsViewAdapter.updateItemsView(output);
+                }
 
                 recyclerView.setAdapter(driveItemsViewAdapter);
                 break;
@@ -300,8 +308,27 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        MenuInflater menuInflater = getMenuInflater();
+        forceShowIcons(menu);
+        menuInflater.inflate(R.menu.main, menu);
         return true;
+    }
+
+    private void forceShowIcons(Menu menu) {
+        if(menu.getClass().getSimpleName().equals("MenuBuilder")){
+            try{
+                Method m = menu.getClass().getDeclaredMethod(
+                        "setOptionalIconsVisible", Boolean.TYPE);
+                m.setAccessible(true);
+                m.invoke(menu, true);
+            }
+            catch(NoSuchMethodException e){
+                Log.e(TAG, "onMenuOpened", e);
+            }
+            catch(Exception e){
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
@@ -312,9 +339,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_search:
+                return true;
+
+            case R.id.action_sort:
+                return true;
+
+            case R.id.action_filter:
+                return true;
+
+
         }
+
 
         return super.onOptionsItemSelected(item);
     }

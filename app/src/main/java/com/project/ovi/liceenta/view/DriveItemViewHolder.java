@@ -30,6 +30,8 @@ public class DriveItemViewHolder extends RecyclerView.ViewHolder {
 
         setCardImage(contentObject);
 
+        setBookmarkImage(contentObject);
+
     }
 
     private void setInfos(DriveItem contentObject) {
@@ -60,6 +62,15 @@ public class DriveItemViewHolder extends RecyclerView.ViewHolder {
             imageView.setImageResource(contentObject.getIconId());
         } else {
             imageView.setImageResource(R.drawable.warning2);
+        }
+    }
+
+    private void setBookmarkImage(DriveItem driveItem) {
+        ImageView bookmarkImage = (ImageView) cardView.findViewById(R.id.bookmarkView);
+        if(driveItem.isBookmarked()){
+            bookmarkImage.setImageResource(R.drawable.star_full_icon);
+        } else {
+            bookmarkImage.setImageResource(R.drawable.star_empty_icon);
         }
     }
 }

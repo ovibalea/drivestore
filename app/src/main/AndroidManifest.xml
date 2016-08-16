@@ -53,6 +53,9 @@
         <activity android:name=".service.sms.SmsBackupActivity"
             android:finishOnTaskLaunch="true"/>
 
+        <activity android:name=".service.activities.BookmarkItemActivity"
+            android:finishOnTaskLaunch="true"/>
+
         <activity android:name=".service.queries.QueryItemsByFolderIdActivity"
             android:finishOnTaskLaunch="true"/>
 
