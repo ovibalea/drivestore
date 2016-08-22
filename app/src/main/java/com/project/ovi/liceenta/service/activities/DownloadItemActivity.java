@@ -5,10 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.github.angads25.filepicker.controller.DialogSelectionListener;
+import com.github.angads25.filepicker.model.DialogConfigs;
+import com.github.angads25.filepicker.model.DialogProperties;
+import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.GenericUrl;
@@ -21,7 +26,6 @@ import com.project.ovi.liceenta.service.BaseActivity;
 import com.project.ovi.liceenta.service.DriveServiceManager;
 import com.project.ovi.liceenta.util.ProjectConstants;
 
-import net.rdrei.android.dirchooser.DirectoryChooserConfig;
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
 
 import java.io.FileOutputStream;
@@ -32,7 +36,7 @@ import java.io.OutputStream;
 /**
  * Created by Ovi on 12/08/16.
  */
-public class DownloadItemActivity extends BaseActivity implements DirectoryChooserFragment.OnFragmentInteractionListener {
+public class DownloadItemActivity extends BaseActivity {
 
     private DirectoryChooserFragment choseFolderDialog;
 
@@ -73,23 +77,32 @@ public class DownloadItemActivity extends BaseActivity implements DirectoryChoos
     }
 
     private void showChooser() {
-        final DirectoryChooserConfig config = DirectoryChooserConfig.builder()
-                .newDirectoryName("DialogSample")
-                .build();
-        choseFolderDialog = DirectoryChooserFragment.newInstance(config);
-        choseFolderDialog.show(getFragmentManager(), null);
+        DialogProperties properties = getDialogProperties();
+        FilePickerDialog filePickerDialog = new FilePickerDialog(DownloadItemActivity.this, properties);
+        setDialogListener(filePickerDialog);
+        filePickerDialog.show();
     }
 
-    @Override
-    public void onSelectDirectory(String path) {
-        new DownloadItemTask(DownloadItemActivity.this, path, driveFile).execute();
+    private void setDialogListener(FilePickerDialog filePickerDialog) {
+        filePickerDialog.setDialogSelectionListener(new DialogSelectionListener() {
+            @Override
+            public void onSelectedFilePaths(String[] files) {
+                String path = files[0];
+                new DownloadItemTask(DownloadItemActivity.this, path, driveFile).execute();
+            }
+        });
     }
 
-    @Override
-    public void onCancelChooser() {
-        choseFolderDialog.dismiss();
-        finish();
+    @NonNull
+    private DialogProperties getDialogProperties() {
+        DialogProperties properties=new DialogProperties();
+        properties.selection_mode = DialogConfigs.SINGLE_MODE;
+        properties.selection_type = DialogConfigs.DIR_SELECT;
+        properties.root = new java.io.File(DialogConfigs.DEFAULT_DIR);
+        properties.extensions = null;
+        return properties;
     }
+
 
 
     /**

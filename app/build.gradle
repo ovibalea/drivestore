@@ -52,6 +52,8 @@ dependencies {
         transitive = true;
     }
 
+    compile 'com.github.angads25:filepicker:1.0.2'
+
     compile group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.11.0-beta'
 
 }

@@ -29,6 +29,8 @@ import com.project.ovi.liceenta.service.AuthenticateActivity;
 import com.project.ovi.liceenta.service.DriveServiceManager;
 import com.project.ovi.liceenta.service.activities.CreateFileActivity;
 import com.project.ovi.liceenta.service.activities.CreateFolderActivity;
+import com.project.ovi.liceenta.service.activities.OpenFileActivity;
+import com.project.ovi.liceenta.service.activities.UploadFileActivity;
 import com.project.ovi.liceenta.service.queries.QueryItemsByFolderIdActivity;
 import com.project.ovi.liceenta.service.sms.SmsBackupActivity;
 import com.project.ovi.liceenta.util.ProjectConstants;
@@ -110,6 +112,15 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra(QueryItemsByFolderIdActivity.FOLDER_ID, folderId);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, ProjectConstants.REQUEST_CONTENT);
+        }
+    }
+
+    public void openFile(String fileId){
+        if(DriveServiceManager.getInstance() != null){
+            Intent intent = new Intent(MainActivity.this, OpenFileActivity.class);
+            intent.putExtra(ProjectConstants.ITEM_ID_TAG, fileId);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
     }
 
@@ -377,6 +388,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_share:
                 break;
             case R.id.nav_send:
+                Intent intentUpload = new Intent(MainActivity.this, UploadFileActivity.class);
+                intentUpload.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intentUpload, ProjectConstants.REQUEST_PROCESS_ITEM);
                 break;
         }
 

@@ -28,13 +28,15 @@ public class ProjectConstants {
 
     public static final int AUTHENTICATION_REQUEST = 30;
 
+    public static final int SELECT_FILE_REQUEST = 50;
+
     public static final String MIME_TEXT_PLAIN = "text/plain";
 
     public static final String MIMETYPE_FOLDER = "application/vnd.google-apps.folder";
 
     public static final String MIME_TYPE_TAG = "mimeTypeTag";
 
-    public static final String ITEM_FIELDS = "id, name, fullFileExtension, trashed, createdTime, size, mimeType, fileExtension, properties";
+    public static final String ITEM_FIELDS = "id, name, fullFileExtension, trashed, createdTime, size, mimeType, fileExtension, properties, webContentLink, webViewLink";
 
     public static final String IS_BOOKMARKED = "isBookmarked";
 

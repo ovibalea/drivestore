@@ -11,6 +11,7 @@ import android.widget.PopupMenu;
 
 import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.R;
+import com.project.ovi.liceenta.model.DriveFile;
 import com.project.ovi.liceenta.model.DriveFolder;
 import com.project.ovi.liceenta.model.DriveItem;
 import com.project.ovi.liceenta.service.activities.BookmarkItemActivity;
@@ -85,6 +86,10 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemViewHol
                 if (item instanceof DriveFolder) {
                     String folderId = item.getId();
                     mainActivity.populateContent(folderId);
+                }
+                if(item instanceof DriveFile) {
+                    String fileId = item.getId();
+                    mainActivity.openFile(fileId);
                 }
             }
         });

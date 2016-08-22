@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 
     <application
@@ -60,6 +61,12 @@
             android:finishOnTaskLaunch="true"/>
 
         <activity android:name=".service.AuthenticateActivity"
+        android:finishOnTaskLaunch="true"/>
+
+        <activity android:name=".service.activities.OpenFileActivity"
+            android:finishOnTaskLaunch="true"/>
+
+        <activity android:name=".service.activities.UploadFileActivity"
             android:finishOnTaskLaunch="true"/>
 
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
