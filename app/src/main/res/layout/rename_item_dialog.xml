@@ -25,13 +25,13 @@
         android:layout_marginBottom="15dp">
 
         <EditText
-            android:id="@+id/editTextFolderTitle"
+            android:id="@+id/editTextNewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.03"
             android:allowUndo="true"
             android:editable="true"
-            android:hint="@string/folderName"
+            android:hint="@string/newName"
             android:maxLength="250"
             android:theme="@style/MyEditText"
             android:layout_below="@+id/view"
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:id="@+id/cancelCreateFolderBtn"
+            android:id="@+id/cancelRenameItemBtn"
             android:layout_below="@+id/editTextFolderTitle"
             android:layout_toRightOf="@+id/view"
             android:layout_toEndOf="@+id/view"
@@ -62,8 +62,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create"
-            android:id="@+id/createFolderBtn"
+            android:text="Rename"
+            android:id="@+id/renameItemBtn"
             android:layout_below="@+id/editTextFolderTitle"
             android:layout_toRightOf="@+id/linearLayout"
             android:layout_toEndOf="@+id/linearLayout"

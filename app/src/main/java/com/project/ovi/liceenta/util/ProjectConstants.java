@@ -1,5 +1,11 @@
 package com.project.ovi.liceenta.util;
 
+import com.google.api.services.drive.model.File;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Ovi on 11/08/16.
  */
@@ -40,5 +46,36 @@ public class ProjectConstants {
 
     public static final String IS_BOOKMARKED = "isBookmarked";
 
+    public static final String ITEM_NAME_TAG = "itemNameTag";
+
+    public static final String ITEM_ATTRIBUTES = "id,name,description,kind,mimeType,createdTime,modifiedTime,modifiedByMeTime,viewedByMeTime,lastModifyingUser,owners,parents,shared,size,version,properties";
+
+
+    public static Map<String, Method> attributeNamesMapping;
+
+    static {
+        attributeNamesMapping = new HashMap<>();
+        try {
+            attributeNamesMapping.put("ID", File.class.getMethod("getId", null));
+            attributeNamesMapping.put("Name", File.class.getMethod("getName", null));
+            attributeNamesMapping.put("Description", File.class.getMethod("getDescription", null));
+            attributeNamesMapping.put("Item type", File.class.getMethod("getKind", null));
+            attributeNamesMapping.put("MimeType", File.class.getMethod("getMimeType", null));
+            attributeNamesMapping.put("Creation Date", File.class.getMethod("getCreatedTime", null));
+            attributeNamesMapping.put("Modified Date", File.class.getMethod("getModifiedTime", null));
+            attributeNamesMapping.put("Last modified by Me", File.class.getMethod("getModifiedByMeTime", null));
+            attributeNamesMapping.put("Last viewed by Me", File.class.getMethod("getViewedByMeTime", null));
+            attributeNamesMapping.put("Last modifying user", File.class.getMethod("getLastModifyingUser", null));
+            attributeNamesMapping.put("Owners", File.class.getMethod("getId", null));
+            attributeNamesMapping.put("Links", File.class.getMethod("getId", null));
+            attributeNamesMapping.put("Is shared", File.class.getMethod("getId", null));
+            attributeNamesMapping.put("Size", File.class.getMethod("getId", null));
+            attributeNamesMapping.put("Version", File.class.getMethod("getId", null));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
 }

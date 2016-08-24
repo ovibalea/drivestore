@@ -1,6 +1,7 @@
 package com.project.ovi.liceenta.model;
 
 import com.google.api.services.drive.model.File;
+import com.project.ovi.liceenta.util.GoogleTypesUtil;
 
 /**
  * Created by Ovi on 12/08/16.
@@ -9,7 +10,7 @@ public class DriveFile extends DriveItem {
 
     private String extension;
 
-    private long size;
+    private long size = 0;
 
     public DriveFile(File file) {
         super(file.getId(), file.getName(), file.getMimeType(), file.getCreatedTime(), file.getProperties());
@@ -18,6 +19,8 @@ public class DriveFile extends DriveItem {
         }
         if(file.getFullFileExtension() != null) {
             this.extension = file.getFullFileExtension();
+        } else {
+            this.extension = GoogleTypesUtil.getExtensionByGoogleMimeType(file.getMimeType());
         }
     }
 
@@ -39,6 +42,9 @@ public class DriveFile extends DriveItem {
 
     @Override
     public String getInfo(){
-        return size + " B - " + super.getInfo();
+        if(size > 0){
+            return size + " B - " + super.getInfo();
+        }
+        return super.getInfo();
     }
 }

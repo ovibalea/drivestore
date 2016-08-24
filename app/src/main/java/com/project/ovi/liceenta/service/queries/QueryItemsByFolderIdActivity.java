@@ -18,7 +18,7 @@ import com.project.ovi.liceenta.model.MessageItem;
 import com.project.ovi.liceenta.service.DriveServiceManager;
 import com.project.ovi.liceenta.util.ItemsWrapperFactory;
 import com.project.ovi.liceenta.util.ProjectConstants;
-import com.project.ovi.liceenta.view.DriveItemsViewAdapter;
+import com.project.ovi.liceenta.view.main.DriveItemsViewAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -34,7 +34,7 @@ import com.project.ovi.liceenta.service.activities.UploadFileActivity;
 import com.project.ovi.liceenta.service.queries.QueryItemsByFolderIdActivity;
 import com.project.ovi.liceenta.service.sms.SmsBackupActivity;
 import com.project.ovi.liceenta.util.ProjectConstants;
-import com.project.ovi.liceenta.view.DriveItemsViewAdapter;
+import com.project.ovi.liceenta.view.main.DriveItemsViewAdapter;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity
         setHideFabOnReciclerViewTouch();
 
         requestAuthentication();
-
 
         populateContent("root");
 

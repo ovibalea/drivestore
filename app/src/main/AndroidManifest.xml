@@ -43,9 +43,22 @@
             android:theme="@style/AppTheme.Dialog"
             android:finishOnTaskLaunch="true"/>
 
+        <activity android:name=".service.activities.RenameActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:finishOnTaskLaunch="true"/>
+
         <activity android:name=".service.activities.DownloadItemActivity"
             android:theme="@style/AppTheme.Dialog"
             android:finishOnTaskLaunch="true"/>
+
+        <activity android:name=".service.activities.ShowItemInfoActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:finishOnTaskLaunch="true"/>
+
+        <activity android:name=".service.activities.AddCustomAttributeActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:finishOnTaskLaunch="true"/>
+
 
         <activity android:name=".service.activities.DeleteItemActivity"
             android:theme="@style/AppTheme.Dialog"

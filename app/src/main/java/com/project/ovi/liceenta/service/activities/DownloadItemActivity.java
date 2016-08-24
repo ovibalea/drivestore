@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -16,18 +15,18 @@ import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.services.drive.Drive;
 import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.model.DriveFile;
 import com.project.ovi.liceenta.service.BaseActivity;
 import com.project.ovi.liceenta.service.DriveServiceManager;
+import com.project.ovi.liceenta.util.GoogleTypesUtil;
 import com.project.ovi.liceenta.util.ProjectConstants;
 
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +57,7 @@ public class DownloadItemActivity extends BaseActivity {
         driveFile = (DriveFile) requestIntent.getSerializableExtra(ProjectConstants.DOWNLOAD_ITEM_ID_TAG);
     }
 
-    private void setButtonsActions(){
+    private void setButtonsActions() {
         yesButton = (Button) findViewById(R.id.yesDownloadBtn);
         noButton = (Button) findViewById(R.id.noDownloadBtn);
         yesButton.setOnClickListener(new View.OnClickListener() {
@@ -95,14 +94,13 @@ public class DownloadItemActivity extends BaseActivity {
 
     @NonNull
     private DialogProperties getDialogProperties() {
-        DialogProperties properties=new DialogProperties();
+        DialogProperties properties = new DialogProperties();
         properties.selection_mode = DialogConfigs.SINGLE_MODE;
         properties.selection_type = DialogConfigs.DIR_SELECT;
         properties.root = new java.io.File(DialogConfigs.DEFAULT_DIR);
         properties.extensions = null;
         return properties;
     }
-
 
 
     /**
@@ -128,6 +126,7 @@ public class DownloadItemActivity extends BaseActivity {
 
         /**
          * Background task to call Drive API.
+         *
          * @param params no parameters needed for this task.
          */
         @Override
@@ -143,72 +142,47 @@ public class DownloadItemActivity extends BaseActivity {
 
         private boolean downloadFile() throws IOException {
 
-            com.google.api.services.drive.model.File dFile = mService.files().get(driveFile.getId()).setFields("id, name, fullFileExtension, trashed, createdTime, size, mimeType, webContentLink").execute();
-
-
 
             java.io.File file = null;
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            InputStream inputStream = null;
 
-            if (dFile.getWebContentLink() != null && dFile.getWebContentLink().length() >0 ) {
 
+            try {
 
-                try {
-
-                    String downloadUrl = "https://www.googleapis.com/drive/v3/files/" + dFile.getId() + "?alt=media";
-                    Log.i("URL:", downloadUrl);
-                    HttpRequest request = mService.getRequestFactory()
-                            .buildGetRequest(new GenericUrl(downloadUrl));
-                    HttpResponse resp = request.execute();
-
-                    InputStream iStream = resp.getContent();
-                    try {
-                        file = new java.io.File(destinationPath, driveFile.getName());
-                        Log.i("DEST PATH", file.getAbsolutePath());
-                        file.createNewFile();
-                        showToast("Downloading: " + driveFile.getName() + " to " + destinationPath);
-                        storeFile(file, iStream);
-                    } finally {
-                        iStream.close();
-                    }
-
-                } catch (Exception e) {
-
-                    showToast("Downloading Error: " + e.getMessage());
-                    e.printStackTrace();
+                if (!GoogleTypesUtil.isGoogleType(driveFile.getMimeType())) {
+                    mService.files().get(driveFile.getId()).executeMediaAndDownloadTo(outputStream);
+                } else {
+                    mService.files().export(driveFile.getId(), "application/pdf").executeMediaAndDownloadTo(outputStream);
                 }
 
+                inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
+                file = new java.io.File(destinationPath, driveFile.getName() + "." + driveFile.getExtension());
+                file.createNewFile();
+                showToast("File " + driveFile.getName() + " was downloaded to " + destinationPath);
+                storeFile(file, inputStream);
+
+            } catch (Exception e) {
+
+                showToast("File could not be downloaded.");
+                e.printStackTrace();
+            } finally {
+                inputStream.close();
+                outputStream.close();
             }
-//            } else {
-//
-
-//                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//                InputStream inputStream =  mService.files().export(driveFile.getId(), dFile.getMimeType()).executeAsInputStream();
-//
-//                file = new java.io.File(destinationPath, driveFile.getName());
-//                file.createNewFile();
-//
-//                storeFile(file, inputStream);
-//            }
-
-//            downloadGFileToJFolder(mService, );
 
             return file != null;
         }
 
-        private void storeFile(java.io.File file, InputStream iStream)
-        {
-            try
-            {
+        private void storeFile(java.io.File file, InputStream iStream) {
+            try {
                 final OutputStream oStream = new FileOutputStream(file);
-                try
-                {
-                    try
-                    {
+                try {
+                    try {
                         final byte[] buffer = new byte[1024];
                         int read;
-                        while ((read = iStream.read(buffer)) != -1)
-                        {
+                        while ((read = iStream.read(buffer)) != -1) {
                             oStream.write(buffer, 0, read);
                         }
                         oStream.flush();
@@ -224,8 +198,6 @@ public class DownloadItemActivity extends BaseActivity {
         }
 
 
-
-
         @Override
         protected void onPreExecute() {
             mProgress.show();
@@ -239,7 +211,7 @@ public class DownloadItemActivity extends BaseActivity {
             } else {
                 showToast("File could not be created!");
             }
-            
+
             finish();
         }
 

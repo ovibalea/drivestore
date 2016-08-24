@@ -1,4 +1,4 @@
-package com.project.ovi.liceenta.view;
+package com.project.ovi.liceenta.view.main;
 
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -79,6 +79,41 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemViewHol
     public void onBindViewHolder(final DriveItemViewHolder holder, final int position) {
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
         holder.bindObject(list.get(position));
+
+        setClickItemListener(holder, position);
+
+        setPopupMenuListener(holder, position);
+
+        setBookmarkListener(holder, position);
+    }
+
+    private void setBookmarkListener(DriveItemViewHolder holder, final int position) {
+        if(holder.cardView.findViewById(R.id.bookmarkView) != null) {
+            holder.cardView.findViewById(R.id.bookmarkView).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DriveItem item = list.get(position);
+                    Intent bookmarkIntent = new Intent(mainActivity, BookmarkItemActivity.class);
+                    bookmarkIntent.putExtra(ProjectConstants.ITEM_ID_TAG, item.getId());
+                    bookmarkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    mainActivity.startActivityForResult(bookmarkIntent, ProjectConstants.REQUEST_PROCESS_ITEM);
+                }
+            });
+        }
+    }
+
+    private void setPopupMenuListener(DriveItemViewHolder holder, final int position) {
+        if(holder.cardView.findViewById(R.id.itemMenuView) != null) {
+            holder.cardView.findViewById(R.id.itemMenuView).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopupMenu(v, list.get(position));
+                }
+            });
+        }
+    }
+
+    private void setClickItemListener(DriveItemViewHolder holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,24 +126,6 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemViewHol
                     String fileId = item.getId();
                     mainActivity.openFile(fileId);
                 }
-            }
-        });
-
-        holder.cardView.findViewById(R.id.itemMenuView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopupMenu(v, list.get(position));
-            }
-        });
-
-        holder.cardView.findViewById(R.id.bookmarkView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DriveItem item = list.get(position);
-                Intent bookmarkIntent = new Intent(mainActivity, BookmarkItemActivity.class);
-                bookmarkIntent.putExtra(ProjectConstants.ITEM_ID_TAG, item.getId());
-                bookmarkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                mainActivity.startActivityForResult(bookmarkIntent, ProjectConstants.REQUEST_PROCESS_ITEM);
             }
         });
     }

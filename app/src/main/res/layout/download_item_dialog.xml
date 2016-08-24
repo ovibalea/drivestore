@@ -14,7 +14,11 @@
         android:text="Do you really want to download item?"
         android:id="@+id/downloadQTextView"
         android:layout_gravity="center_horizontal"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical|center_horizontal" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -31,8 +35,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_toRightOf="@+id/linearLayout"
             android:layout_toEndOf="@+id/linearLayout"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/shape"/>
+            android:layout_marginRight="10dp"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -41,8 +44,7 @@
             android:id="@+id/noDownloadBtn"
             android:layout_toRightOf="@+id/view"
             android:layout_toEndOf="@+id/view"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/shape"/>
+            android:layout_marginLeft="10dp"/>
 
     </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.project.ovi.liceenta.view;
+package com.project.ovi.liceenta.view.main;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -66,11 +66,13 @@ public class DriveItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setBookmarkImage(DriveItem driveItem) {
-        ImageView bookmarkImage = (ImageView) cardView.findViewById(R.id.bookmarkView);
-        if(driveItem.isBookmarked()){
-            bookmarkImage.setImageResource(R.drawable.star_full_icon);
-        } else {
-            bookmarkImage.setImageResource(R.drawable.star_empty_icon);
+        if(driveItem instanceof DriveFile || driveItem instanceof DriveFolder) {
+            ImageView bookmarkImage = (ImageView) cardView.findViewById(R.id.bookmarkView);
+            if (driveItem.isBookmarked()) {
+                bookmarkImage.setImageResource(R.drawable.star_full_icon);
+            } else {
+                bookmarkImage.setImageResource(R.drawable.star_empty_icon);
+            }
         }
     }
 }

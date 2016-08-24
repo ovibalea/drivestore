@@ -59,8 +59,7 @@
             android:layout_height="wrap_content"
             android:text="Cancel"
             android:id="@+id/cancelBtn"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/shape" />
+            android:layout_marginRight="10dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -68,8 +67,7 @@
             android:text="Save"
             android:id="@+id/saveBtn"
             android:shadowRadius="5"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/shape" />
+            android:layout_marginLeft="10dp" />
     </LinearLayout>
 
 

@@ -8,6 +8,7 @@
     <string name="activity_search">Search</string>
     <string name="activity_sort">Sort</string>
     <string name="activity_filter">Filter</string>
+    <string name="activity_reload">Reload</string>
 
 
     <string name="newFileName">New File</string>
@@ -15,10 +16,17 @@
     <string name="TextHere">Enter your text here...</string>
 
     <string name = "folderName">Folder name</string>
+    <string name = "attrName">Attribute name</string>
+    <string name = "attrValue">Attribute value</string>
+    <string name = "newName">New name</string>
 
     <string name = "download">Download</string>
     <string name = "delete">Delete</string>
     <string name = "infos">Show Metadata</string>
+    <string name = "rename">Rename</string>
+    <string name = "addtag">Add custom tag</string>
+    <string name = "copy">Copy</string>
+    <string name = "cut">Cut</string>
 
 
 </resources>

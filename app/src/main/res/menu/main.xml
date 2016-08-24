@@ -20,4 +20,10 @@
         android:icon="@drawable/filter_icon"
         android:title="@string/activity_filter"
         android:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_reload"
+        android:icon="@drawable/reload_icon"
+        android:title="@string/activity_reload"
+        android:showAsAction="always"/>
 </menu>
