@@ -14,9 +14,9 @@
         android:title="@string/rename" />
 
     <item
-        android:id="@+id/action_add_tag"
-        android:icon="@drawable/add_tag_icon"
-        android:title="@string/addtag" />
+        android:id="@+id/action_bookmark"
+        android:icon="@drawable/star_full"
+        android:title="@string/bookmark" />
 
     <item
         android:id="@+id/action_download"

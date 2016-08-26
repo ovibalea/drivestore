@@ -7,11 +7,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.service.BaseActivity;
@@ -19,92 +18,66 @@ import com.project.ovi.liceenta.service.DriveServiceManager;
 import com.project.ovi.liceenta.util.ProjectConstants;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by Ovi on 11/08/16.
+ * Created by Ovi on 25/08/16.
  */
-public class CreateFolderActivity extends BaseActivity {
+public class TagItemActivity extends BaseActivity {
 
-    private String parentFolderId;
-
-    private Button createButton;
-
-    private Button cancelButton;
+    private String itemId;
+    private Button selectButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_folder_dialog);
 
-        setButtonsActions();
+        itemId = getIntent().getStringExtra(ProjectConstants.ITEM_ID_TAG);
 
-        parentFolderId = getIntent().getStringExtra(ProjectConstants.PARENT_FOLDER_ID_TAG);
+        setContentView(R.layout.tag_item_dialog);
+        setButtonListener();
+
 
     }
 
-    private void setButtonsActions() {
-        createButton = (Button) findViewById(R.id.createFolderBtn);
-        cancelButton = (Button) findViewById(R.id.cancelCreateFolderBtn);
-        createButton.setOnClickListener(new View.OnClickListener() {
+    private void setButtonListener(){
+        selectButton = (Button) findViewById(R.id.setTagBtn);
+        selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String folderName = getFolderName();
-                new CreateFolderTask(CreateFolderActivity.this, parentFolderId, folderName).execute();
-            }
-        });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finalizeActionWithResult(false);
+                RadioGroup radioGroup = (RadioGroup) findViewById(R.id.tagRadioGroup);
+                int tagId = radioGroup.getCheckedRadioButtonId();
+                String tagName = ProjectConstants.tagIdNameMapping.get(tagId);
+                new TagItemTask(TagItemActivity.this, itemId, tagName).execute();
             }
         });
     }
+
+
 
     @Override
     public void onBackPressed() {
-        finalizeActionWithResult(false);
-    }
-
-    private void finalizeActionWithResult(boolean result) {
-        Intent intent = new Intent();
-        intent.putExtra(ProjectConstants.IS_ITEM_PROCESSED, result);
-        setResult(ProjectConstants.REQUEST_PROCESS_ITEM, intent);
         finish();
     }
-
-
-    private String getFolderName(){
-        EditText nameEditText = (EditText) findViewById(R.id.editTextFolderTitle);
-        String editFolderName = nameEditText.getText().toString();
-        String folderName = (editFolderName != null && !editFolderName.isEmpty()) ? editFolderName : "New folder";
-        return folderName;
-    }
-
 
     /**
      * An asynchronous task that handles the Drive API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class CreateFolderTask extends AsyncTask<Void, Void, Boolean> {
+    private class TagItemTask extends AsyncTask<Void, Void, Boolean> {
 
-        private ProgressDialog mProgress;
-
-        private Drive mService = null;
-
+        private com.google.api.services.drive.Drive mService = null;
         private Exception mLastError = null;
+        private ProgressDialog mProgress;
+        private String itemId;
+        private String tagName;
 
-        private String parentFolderId;
-
-        private String folderName;
-
-        public CreateFolderTask(Context context, String parentFolderId, String folderName) {
+        public TagItemTask(Context context, String itemId, String tagName) {
             mProgress = new ProgressDialog(context);
-            mProgress.setMessage("Creating folder...");
-
-            this.parentFolderId = parentFolderId;
-            this.folderName = folderName;
+            mProgress.setMessage("Tag item...");
+            this.itemId = itemId;
+            this.tagName = tagName;
 
             mService = DriveServiceManager.getInstance().getService();
         }
@@ -116,7 +89,7 @@ public class CreateFolderActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                return createFolderOnFolder();
+                return bookmarkItem();
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
@@ -124,17 +97,27 @@ public class CreateFolderActivity extends BaseActivity {
             }
         }
 
-        private boolean createFolderOnFolder() throws IOException {
+        private boolean bookmarkItem() throws IOException {
 
-            File folderObject = new File();
-            folderObject.setName(folderName);
-            folderObject.setMimeType(ProjectConstants.MIMETYPE_FOLDER);
-            folderObject.setParents(Arrays.asList(parentFolderId));
+            File item = mService.files().get(itemId).setFields("properties").execute();
+            Map<String, String> properties = item.getProperties();
+            if(properties == null){
+                properties = new HashMap<>();
+            }
 
-            File folder = mService.files().create(folderObject)
-                    .execute();
+            if(!tagName.equals("noTag")){
+                properties.put(ProjectConstants.ITEM_TAG, tagName);
+            } else {
+                if(properties.get(ProjectConstants.ITEM_TAG) != null){
+                    properties.put(ProjectConstants.ITEM_TAG, "");
+                }
+            }
 
-            return folder != null;
+            File newFile = new File();
+            newFile.setProperties(properties);
+            mService.files().update(itemId, newFile).execute();
+
+            return true;
         }
 
         @Override
@@ -146,12 +129,15 @@ public class CreateFolderActivity extends BaseActivity {
         protected void onPostExecute(Boolean output) {
             mProgress.dismiss();
             if (output == true) {
-                showToast("Folder created successfully!");
+                showToast("File tagged successfully!");
             } else {
-                showToast("Folder could not be created!");
+                showToast("File could not be tagged!");
             }
 
-            finalizeActionWithResult(output);
+            Intent intent = new Intent();
+            intent.putExtra(ProjectConstants.IS_ITEM_CREATED,output);
+            setResult(ProjectConstants.REQUEST_CREATE_ITEM, intent);
+            finish();
         }
 
         @Override

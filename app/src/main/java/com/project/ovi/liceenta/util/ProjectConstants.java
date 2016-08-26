@@ -1,8 +1,7 @@
 package com.project.ovi.liceenta.util;
 
-import com.google.api.services.drive.model.File;
+import com.project.ovi.liceenta.R;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +15,8 @@ public class ProjectConstants {
     public static final int REQUEST_CONTENT = 10;
 
     public static final int REQUEST_CREATE_ITEM = 20;
+
+    public static final int AUTHENTICATION_REQUEST = 30;
 
     public static final int REQUEST_PROCESS_ITEM = 40;
 
@@ -32,50 +33,63 @@ public class ProjectConstants {
 
     public static final String IS_AUTHENTICATED = "isAuthenticated";
 
-    public static final int AUTHENTICATION_REQUEST = 30;
-
-    public static final int SELECT_FILE_REQUEST = 50;
-
-    public static final String MIME_TEXT_PLAIN = "text/plain";
+    public static final String VIEW_ADAPTER_ITEMS = "driveItemsViewAdapter";
 
     public static final String MIMETYPE_FOLDER = "application/vnd.google-apps.folder";
 
-    public static final String MIME_TYPE_TAG = "mimeTypeTag";
+    public static final String ITEM_FIELDS = "id, name, fullFileExtension, trashed, createdTime, size, mimeType, fileExtension, properties, webContentLink, webViewLink, starred";
 
-    public static final String ITEM_FIELDS = "id, name, fullFileExtension, trashed, createdTime, size, mimeType, fileExtension, properties, webContentLink, webViewLink";
+    public static final String ITEM_TAG = "itemTag";
+    public static final String FOLDER_ID = "folderId";
 
-    public static final String IS_BOOKMARKED = "isBookmarked";
-
-    public static final String ITEM_NAME_TAG = "itemNameTag";
+    public static final String ROOT = "root";
 
     public static final String ITEM_ATTRIBUTES = "id,name,description,kind,mimeType,createdTime,modifiedTime,modifiedByMeTime,viewedByMeTime,lastModifyingUser,owners,parents,shared,size,version,properties";
 
+    public static final String NAME = "name";
+    public static final String CREATED_DATE = "createdTime";
+    public static final String MODIFIED_DATE = "modifiedTime";
+    public static final String MODIFIED_BY_ME_DATE = "modifiedByMeTime";
+    public static final String SHARED_WITH_ME_TIME = "sharedWithMeTime";
+    public static final String RECENCY = "recency";
+    public static final String TYPE = "folder";
 
-    public static Map<String, Method> attributeNamesMapping;
+    public static Map<Integer, String> orderByMapping;
 
     static {
-        attributeNamesMapping = new HashMap<>();
-        try {
-            attributeNamesMapping.put("ID", File.class.getMethod("getId", null));
-            attributeNamesMapping.put("Name", File.class.getMethod("getName", null));
-            attributeNamesMapping.put("Description", File.class.getMethod("getDescription", null));
-            attributeNamesMapping.put("Item type", File.class.getMethod("getKind", null));
-            attributeNamesMapping.put("MimeType", File.class.getMethod("getMimeType", null));
-            attributeNamesMapping.put("Creation Date", File.class.getMethod("getCreatedTime", null));
-            attributeNamesMapping.put("Modified Date", File.class.getMethod("getModifiedTime", null));
-            attributeNamesMapping.put("Last modified by Me", File.class.getMethod("getModifiedByMeTime", null));
-            attributeNamesMapping.put("Last viewed by Me", File.class.getMethod("getViewedByMeTime", null));
-            attributeNamesMapping.put("Last modifying user", File.class.getMethod("getLastModifyingUser", null));
-            attributeNamesMapping.put("Owners", File.class.getMethod("getId", null));
-            attributeNamesMapping.put("Links", File.class.getMethod("getId", null));
-            attributeNamesMapping.put("Is shared", File.class.getMethod("getId", null));
-            attributeNamesMapping.put("Size", File.class.getMethod("getId", null));
-            attributeNamesMapping.put("Version", File.class.getMethod("getId", null));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        orderByMapping = new HashMap<>();
 
+        orderByMapping.put(R.id.radioOrderName, NAME);
+        orderByMapping.put(R.id.radioOrderCrDate, CREATED_DATE);
+        orderByMapping.put(R.id.radioOrderModDate, MODIFIED_DATE);
+        orderByMapping.put(R.id.radioOrderModMeDate, MODIFIED_BY_ME_DATE);
+        orderByMapping.put(R.id.radioOrderSharedMeDate, SHARED_WITH_ME_TIME);
+        orderByMapping.put(R.id.radioOrderRecency, RECENCY);
+        orderByMapping.put(R.id.radioOrderType, TYPE);
 
+    }
+
+    public static Map<String, Integer> tagNameIconMapping;
+
+    static {
+        tagNameIconMapping = new HashMap<>();
+        tagNameIconMapping.put("blueTag", R.drawable.tag_blue_icon);
+        tagNameIconMapping.put("redTag", R.drawable.tag_red_icon);
+        tagNameIconMapping.put("greenTag", R.drawable.tag_green_icon);
+        tagNameIconMapping.put("orangeTag", R.drawable.tag_orange_icon);
+        tagNameIconMapping.put("yellowTag", R.drawable.tag_yellow_icon);
+        tagNameIconMapping.put("noTag", R.drawable.tag_white_icon);
+    }
+
+    public static Map<Integer, String> tagIdNameMapping;
+    static {
+        tagIdNameMapping = new HashMap<>();
+        tagIdNameMapping.put(R.id.blueTag, "blueTag");
+        tagIdNameMapping.put(R.id.redTag, "redTag");
+        tagIdNameMapping.put(R.id.greenTag, "greenTag");
+        tagIdNameMapping.put(R.id.orangeTag, "orangeTag");
+        tagIdNameMapping.put(R.id.yellowTag, "yellowTag");
+        tagIdNameMapping.put(R.id.noTag, "noTag");
     }
 
 }

@@ -14,8 +14,6 @@ import com.project.ovi.liceenta.service.DriveServiceManager;
 import com.project.ovi.liceenta.util.ProjectConstants;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Ovi on 15/08/16.
@@ -29,7 +27,7 @@ public class BookmarkItemActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         itemId = getIntent().getStringExtra(ProjectConstants.ITEM_ID_TAG);
-        new BookmarkItemTask(BookmarkItemActivity.this).execute();
+        new BookmarkItemTask(BookmarkItemActivity.this, itemId).execute();
     }
 
     /**
@@ -41,10 +39,12 @@ public class BookmarkItemActivity extends BaseActivity {
         private com.google.api.services.drive.Drive mService = null;
         private Exception mLastError = null;
         private ProgressDialog mProgress;
+        private String itemId;
 
-        public BookmarkItemTask(Context context) {
+        public BookmarkItemTask(Context context, String id) {
             mProgress = new ProgressDialog(context);
             mProgress.setMessage("Bookmark item...");
+            itemId = id;
 
             mService = DriveServiceManager.getInstance().getService();
         }
@@ -66,27 +66,11 @@ public class BookmarkItemActivity extends BaseActivity {
 
         private boolean bookmarkItem() throws IOException {
 
-            File item = mService.files().get(itemId).execute();
+            File item = mService.files().get(itemId).setFields("starred").execute();
             File newFile = new File();
-            Map<String, String> properties = item.getProperties();
-            if(properties == null){
-                properties = new HashMap<>();
-                properties.put(ProjectConstants.IS_BOOKMARKED, "1");
-
-            } else {
-                String isBookmarked = item.getProperties().get(ProjectConstants.IS_BOOKMARKED);
-                if (isBookmarked == null) {
-                    item.getProperties().put(ProjectConstants.IS_BOOKMARKED, "1");
-                } else {
-                    if (item.getProperties().get(ProjectConstants.IS_BOOKMARKED).equals("1")) {
-                        item.getProperties().put(ProjectConstants.IS_BOOKMARKED, "0");
-                    } else {
-                        item.getProperties().put(ProjectConstants.IS_BOOKMARKED, "1");
-                    }
-                }
-            }
-            newFile.setProperties(properties);
-            mService.files().update(item.getId(), newFile).execute();
+            boolean isStared = item.getStarred();
+            newFile.setStarred(!isStared);
+            mService.files().update(itemId, newFile).execute();
 
             return true;
         }

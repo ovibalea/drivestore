@@ -13,7 +13,7 @@ public class DriveFile extends DriveItem {
     private long size = 0;
 
     public DriveFile(File file) {
-        super(file.getId(), file.getName(), file.getMimeType(), file.getCreatedTime(), file.getProperties());
+        super(file.getId(), file.getName(), file.getMimeType(), file.getCreatedTime(), file.getStarred(), file.getProperties());
         if(file.getSize() != null) {
             this.size = file.getSize();
         }

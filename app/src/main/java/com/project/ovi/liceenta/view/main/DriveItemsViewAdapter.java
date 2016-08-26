@@ -14,7 +14,7 @@ import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.model.DriveFile;
 import com.project.ovi.liceenta.model.DriveFolder;
 import com.project.ovi.liceenta.model.DriveItem;
-import com.project.ovi.liceenta.service.activities.BookmarkItemActivity;
+import com.project.ovi.liceenta.service.activities.TagItemActivity;
 import com.project.ovi.liceenta.util.ProjectConstants;
 
 import java.io.Serializable;
@@ -84,19 +84,19 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemViewHol
 
         setPopupMenuListener(holder, position);
 
-        setBookmarkListener(holder, position);
+        setTagListener(holder, position);
     }
 
-    private void setBookmarkListener(DriveItemViewHolder holder, final int position) {
-        if(holder.cardView.findViewById(R.id.bookmarkView) != null) {
-            holder.cardView.findViewById(R.id.bookmarkView).setOnClickListener(new View.OnClickListener() {
+    private void setTagListener(DriveItemViewHolder holder, final int position) {
+        if(holder.cardView.findViewById(R.id.itemTagView) != null) {
+            holder.cardView.findViewById(R.id.itemTagView).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DriveItem item = list.get(position);
-                    Intent bookmarkIntent = new Intent(mainActivity, BookmarkItemActivity.class);
-                    bookmarkIntent.putExtra(ProjectConstants.ITEM_ID_TAG, item.getId());
-                    bookmarkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    mainActivity.startActivityForResult(bookmarkIntent, ProjectConstants.REQUEST_PROCESS_ITEM);
+                    Intent tagIntent = new Intent(mainActivity, TagItemActivity.class);
+                    tagIntent.putExtra(ProjectConstants.ITEM_ID_TAG, item.getId());
+                    tagIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    mainActivity.startActivityForResult(tagIntent, ProjectConstants.REQUEST_PROCESS_ITEM);
                 }
             });
         }
@@ -122,7 +122,7 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemViewHol
                     String folderId = item.getId();
                     mainActivity.populateContent(folderId);
                 }
-                if(item instanceof DriveFile) {
+                if (item instanceof DriveFile) {
                     String fileId = item.getId();
                     mainActivity.openFile(fileId);
                 }
@@ -138,8 +138,13 @@ public class DriveItemsViewAdapter extends RecyclerView.Adapter<DriveItemViewHol
         PopupMenu popup = new PopupMenu(mainActivity, view);
         forceShowIcons(popup);
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.item_menu, popup.getMenu());
-        popup.setOnMenuItemClickListener(new MyMenuItemClickListener(mainActivity, driveItem));
+
+        if(driveItem.isBookmarked()) {
+            inflater.inflate(R.menu.item_menu_bookmarked, popup.getMenu());
+        } else {
+            inflater.inflate(R.menu.item_menu_unbookmarked, popup.getMenu());
+        }
+        popup.setOnMenuItemClickListener(new ItemMenuClickListener(mainActivity, driveItem));
         popup.show();
     }
 

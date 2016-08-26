@@ -6,7 +6,7 @@ package com.project.ovi.liceenta.model;
 public class MessageItem extends DriveItem {
 
     public MessageItem() {
-        super(null, "No Items!", null, null, null);
+        super(null, "No Items!", null, null, false, null);
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.project.ovi.liceenta.MainActivity;
 import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.model.DriveFile;
 import com.project.ovi.liceenta.model.DriveItem;
+import com.project.ovi.liceenta.service.activities.BookmarkItemActivity;
 import com.project.ovi.liceenta.service.activities.DeleteItemActivity;
 import com.project.ovi.liceenta.service.activities.DownloadItemActivity;
 import com.project.ovi.liceenta.service.activities.RenameActivity;
@@ -18,13 +19,13 @@ import com.project.ovi.liceenta.util.ProjectConstants;
 /**
  * Click listener for popup menu items
  */
-class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+class ItemMenuClickListener implements PopupMenu.OnMenuItemClickListener {
 
     private MainActivity mainActivity;
 
     private DriveItem driveItem;
 
-    public MyMenuItemClickListener(MainActivity activity, DriveItem selectedDriveItem) {
+    public ItemMenuClickListener(MainActivity activity, DriveItem selectedDriveItem) {
         this.mainActivity = activity;
         this.driveItem = selectedDriveItem;
     }
@@ -59,6 +60,12 @@ class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
                 renameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 renameIntent.putExtra(ProjectConstants.ITEM_ID_TAG, driveItem.getId());
                 mainActivity.startActivityForResult(renameIntent, ProjectConstants.REQUEST_PROCESS_ITEM);
+                return true;
+            case R.id.action_bookmark:
+                Intent bookmarkIntent = new Intent(mainActivity, BookmarkItemActivity.class);
+                bookmarkIntent.putExtra(ProjectConstants.ITEM_ID_TAG, driveItem.getId());
+                bookmarkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                mainActivity.startActivityForResult(bookmarkIntent, ProjectConstants.REQUEST_PROCESS_ITEM);
                 return true;
             default:
         }

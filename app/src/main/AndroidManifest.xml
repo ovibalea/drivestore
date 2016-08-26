@@ -59,6 +59,14 @@
             android:theme="@style/AppTheme.Dialog"
             android:finishOnTaskLaunch="true"/>
 
+        <activity android:name=".service.activities.TagItemActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:finishOnTaskLaunch="true"/>
+
+        <activity android:name=".service.queries.OrderActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:finishOnTaskLaunch="true"/>
+
 
         <activity android:name=".service.activities.DeleteItemActivity"
             android:theme="@style/AppTheme.Dialog"

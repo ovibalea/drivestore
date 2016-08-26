@@ -10,6 +10,9 @@ import com.project.ovi.liceenta.R;
 import com.project.ovi.liceenta.model.DriveFile;
 import com.project.ovi.liceenta.model.DriveFolder;
 import com.project.ovi.liceenta.model.DriveItem;
+import com.project.ovi.liceenta.util.ProjectConstants;
+
+import java.util.Map;
 
 /**
  * Created by Ovi on 12/08/16.
@@ -30,7 +33,7 @@ public class DriveItemViewHolder extends RecyclerView.ViewHolder {
 
         setCardImage(contentObject);
 
-        setBookmarkImage(contentObject);
+        setTagImage(contentObject);
 
     }
 
@@ -65,14 +68,11 @@ public class DriveItemViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void setBookmarkImage(DriveItem driveItem) {
+    private void setTagImage(DriveItem driveItem) {
         if(driveItem instanceof DriveFile || driveItem instanceof DriveFolder) {
-            ImageView bookmarkImage = (ImageView) cardView.findViewById(R.id.bookmarkView);
-            if (driveItem.isBookmarked()) {
-                bookmarkImage.setImageResource(R.drawable.star_full_icon);
-            } else {
-                bookmarkImage.setImageResource(R.drawable.star_empty_icon);
-            }
+            ImageView tagImage = (ImageView) cardView.findViewById(R.id.itemTagView);
+            Map<String, Integer> tagIdIconsMapping = ProjectConstants.tagNameIconMapping;
+            tagImage.setImageResource(tagIdIconsMapping.get(driveItem.getTagName()));
         }
     }
 }

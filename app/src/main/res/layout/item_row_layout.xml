@@ -56,11 +56,11 @@
             android:layout_marginRight="5dp" />
 
         <ImageView
-            android:id="@+id/bookmarkView"
+            android:id="@+id/itemTagView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:src="@drawable/star_empty_icon"
+            android:src="@drawable/tag_white_icon"
             android:layout_gravity="center_vertical"
             android:textAlignment="center" />
 

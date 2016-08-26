@@ -31,6 +31,7 @@ import com.project.ovi.liceenta.service.activities.CreateFileActivity;
 import com.project.ovi.liceenta.service.activities.CreateFolderActivity;
 import com.project.ovi.liceenta.service.activities.OpenFileActivity;
 import com.project.ovi.liceenta.service.activities.UploadFileActivity;
+import com.project.ovi.liceenta.service.queries.OrderActivity;
 import com.project.ovi.liceenta.service.queries.QueryItemsByFolderIdActivity;
 import com.project.ovi.liceenta.service.sms.SmsBackupActivity;
 import com.project.ovi.liceenta.util.ProjectConstants;
@@ -94,7 +95,6 @@ public class MainActivity extends AppCompatActivity
 
         populateContent("root");
 
-
     }
 
     private void requestAuthentication() {
@@ -109,6 +109,17 @@ public class MainActivity extends AppCompatActivity
             this.foldersVisited.push(folderId);
             Intent intent = new Intent(MainActivity.this, QueryItemsByFolderIdActivity.class);
             intent.putExtra(QueryItemsByFolderIdActivity.FOLDER_ID, folderId);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, ProjectConstants.REQUEST_CONTENT);
+        }
+    }
+
+    public void sortingContent(String folderId) {
+        if (DriveServiceManager.getInstance() != null) {
+            this.folderId = folderId;
+            this.foldersVisited.push(folderId);
+            Intent intent = new Intent(MainActivity.this, OrderActivity.class);
+            intent.putExtra(ProjectConstants.FOLDER_ID, folderId);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, ProjectConstants.REQUEST_CONTENT);
         }
@@ -251,30 +262,27 @@ public class MainActivity extends AppCompatActivity
             case ProjectConstants.AUTHENTICATION_REQUEST:
                 isAuthenticated = data.getBooleanExtra(ProjectConstants.IS_AUTHENTICATED, false);
                 if (isAuthenticated) {
-                    populateContent("root");
+                    populateContent(ProjectConstants.ROOT);
                 } else {
                     requestAuthentication();
                 }
                 break;
             case ProjectConstants.REQUEST_CONTENT:
-                ArrayList<DriveItem> output = (ArrayList<DriveItem>) data.getSerializableExtra(QueryItemsByFolderIdActivity.VIEW_ADAPTER_ITEMS);
+                if(data != null) {
+                    ArrayList<DriveItem> output = (ArrayList<DriveItem>) data.getSerializableExtra(ProjectConstants.VIEW_ADAPTER_ITEMS);
 
-                if(output != null){
-                    driveItemsViewAdapter.updateItemsView(output);
-                }
-
-                recyclerView.setAdapter(driveItemsViewAdapter);
-                break;
-            case ProjectConstants.REQUEST_CREATE_ITEM:
-                boolean isItemCreated = data.getBooleanExtra(ProjectConstants.IS_ITEM_CREATED, true);
-                if (isItemCreated) {
-                    populateContent(folderId);
+                    if (output != null) {
+                        driveItemsViewAdapter.updateItemsView(output);
+                    }
+                    recyclerView.setAdapter(driveItemsViewAdapter);
                 }
                 break;
             case ProjectConstants.REQUEST_PROCESS_ITEM:
-                boolean isItemProcessed = data.getBooleanExtra(ProjectConstants.IS_ITEM_PROCESSED, true);
-                if (isItemProcessed) {
-                    populateContent(folderId);
+                if(data != null) {
+                    boolean isItemProcessed = data.getBooleanExtra(ProjectConstants.IS_ITEM_PROCESSED, true);
+                    if (isItemProcessed) {
+                        populateContent(folderId);
+                    }
                 }
                 break;
         }
@@ -354,11 +362,15 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.action_sort:
+                sortingContent(folderId);
                 return true;
 
             case R.id.action_filter:
                 return true;
 
+            case R.id.action_reload:
+                populateContent(ProjectConstants.ROOT);
+                return true;
 
         }
 

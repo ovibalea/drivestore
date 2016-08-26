@@ -27,15 +27,26 @@ public class DriveItem implements Serializable{
 
     private boolean isBookmarked = false;
 
-    public DriveItem(String id, String name, String mimeType, DateTime createdTime, Map<String, String> properties){
+    private String tagName;
+
+    public DriveItem(String id, String name, String mimeType, DateTime createdTime, boolean isBookmarked, Map<String, String> properties){
         this.id = id;
         this.name = name;
         this.mimeType = mimeType;
         this.creationDate = createdTime;
         this.iconId = GoogleTypesUtil.getIconId(mimeType);
-        if(properties != null && properties.get(ProjectConstants.IS_BOOKMARKED) != null) {
-            this.isBookmarked = properties.get(ProjectConstants.IS_BOOKMARKED).equals("1");
+        this.isBookmarked = isBookmarked;
+        this.tagName = getTagName(properties);
+    }
+
+    private String getTagName(Map<String, String> properties) {
+        if(properties != null){
+            String value = properties.get(ProjectConstants.ITEM_TAG);
+            if(value != null && ProjectConstants.tagNameIconMapping.get(value) != null){
+                return properties.get(ProjectConstants.ITEM_TAG);
+            }
         }
+        return "noTag";
     }
 
     public String getId() {
@@ -76,6 +87,14 @@ public class DriveItem implements Serializable{
 
     public void setIsBookmarked(boolean isBookmarked) {
         this.isBookmarked = isBookmarked;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagId(String tagId) {
+        this.tagName = tagId;
     }
 
     public String getInfo(){

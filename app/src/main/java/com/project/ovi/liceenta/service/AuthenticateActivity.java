@@ -2,8 +2,6 @@ package com.project.ovi.liceenta.service;
 
 import android.Manifest;
 import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -29,7 +26,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 /**
  * Created by Ovi on 15/08/16.
  */
-public class AuthenticateActivity extends Activity implements EasyPermissions.PermissionCallbacks {
+public class AuthenticateActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
 
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
     public static final int REQUEST_AUTHORIZATION = 1001;
@@ -189,22 +186,6 @@ public class AuthenticateActivity extends Activity implements EasyPermissions.Pe
         }
     }
 
-    /**
-     * Display an error dialog showing that Google Play Services is missing
-     * or out of date.
-     * @param connectionStatusCode code describing the presence (or lack of)
-     *     Google Play Services on this device.
-     */
-    public void showGooglePlayServicesAvailabilityErrorDialog(
-            final int connectionStatusCode) {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        Dialog dialog = apiAvailability.getErrorDialog(
-                this,
-                connectionStatusCode,
-                REQUEST_GOOGLE_PLAY_SERVICES);
-        dialog.show();
-    }
-
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         //Nothing
@@ -230,16 +211,6 @@ public class AuthenticateActivity extends Activity implements EasyPermissions.Pe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(
                 requestCode, permissions, grantResults, this);
-    }
-
-    public void showToast(final String toast) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), toast,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 }

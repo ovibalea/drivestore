@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="top">
+
+    <RadioGroup
+        android:id="@+id/tagRadioGroup"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:checkedButton="@+id/noTag"
+        android:layout_margin="20dp">
+
+
+        <RadioButton
+            android:id="@+id/blueTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableRight="@drawable/tag_blue_icon"
+            android:text="Blue Tag"
+            android:textAlignment="center" />
+
+
+        <RadioButton
+            android:id="@+id/redTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableRight="@drawable/tag_red_icon"
+            android:text="Red Tag"
+            android:textAlignment="center" />
+
+
+        <RadioButton
+            android:id="@+id/greenTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableRight="@drawable/tag_green_icon"
+            android:text="Green Tag"
+            android:textAlignment="center" />
+
+
+        <RadioButton
+            android:id="@+id/orangeTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableRight="@drawable/tag_orange_icon"
+            android:text="Orange Tag"
+            android:textAlignment="center" />
+
+
+        <RadioButton
+            android:id="@+id/yellowTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableRight="@drawable/tag_yellow_icon"
+            android:text="Yellow Tag"
+            android:textAlignment="center" />
+
+        <RadioButton
+            android:id="@+id/noTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableRight="@drawable/tag_white_icon"
+            android:text="No Tag"
+            android:textAlignment="center" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/setTagBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:text="Select"
+        android:layout_marginTop="5dp" />
+</LinearLayout>

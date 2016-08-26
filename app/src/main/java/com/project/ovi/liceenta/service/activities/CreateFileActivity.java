@@ -59,7 +59,7 @@ public class CreateFileActivity extends BaseActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finalizeActionWithNoResult();
+                finalizeActionWithResult(false);
             }
         });
 
@@ -71,16 +71,16 @@ public class CreateFileActivity extends BaseActivity {
         });
     }
 
-    private void finalizeActionWithNoResult() {
+    private void finalizeActionWithResult(boolean result) {
         Intent intent = new Intent();
-        intent.putExtra(ProjectConstants.IS_ITEM_CREATED,false);
-        setResult(ProjectConstants.REQUEST_CREATE_ITEM, intent);
+        intent.putExtra(ProjectConstants.IS_ITEM_PROCESSED,result);
+        setResult(ProjectConstants.REQUEST_PROCESS_ITEM, intent);
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        finalizeActionWithNoResult();
+        finalizeActionWithResult(false);
     }
 
     /**
@@ -155,10 +155,7 @@ public class CreateFileActivity extends BaseActivity {
                 showToast("File could not be created!");
             }
 
-            Intent intent = new Intent();
-            intent.putExtra(ProjectConstants.IS_ITEM_CREATED,output);
-            setResult(ProjectConstants.REQUEST_CREATE_ITEM, intent);
-            finish();
+            finalizeActionWithResult(output);
         }
 
         @Override

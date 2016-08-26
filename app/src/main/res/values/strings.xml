@@ -25,6 +25,7 @@
     <string name = "infos">Show Metadata</string>
     <string name = "rename">Rename</string>
     <string name = "addtag">Add custom tag</string>
+    <string name = "bookmark">Bookmark</string>
     <string name = "copy">Copy</string>
     <string name = "cut">Cut</string>
 
