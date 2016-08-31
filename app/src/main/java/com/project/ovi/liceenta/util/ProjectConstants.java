@@ -20,6 +20,10 @@ public class ProjectConstants {
 
     public static final int REQUEST_PROCESS_ITEM = 40;
 
+    public static final int REQUEST_TAG = 50;
+
+
+
     public static final String PARENT_FOLDER_ID_TAG = "parentFolderIdTag";
 
     public static final String DOWNLOAD_ITEM_ID_TAG = "downloadItemIdTag";
@@ -54,6 +58,11 @@ public class ProjectConstants {
     public static final String RECENCY = "recency";
     public static final String TYPE = "folder";
 
+    public static final String SHARED_WITH_ME = "sharedWithMe";
+    public static final String OWNED_BY_ME = "ownedByMe";
+    public static final String BOOKMARKED = "bookmarked";
+    public static final String TAGGED = "tagged";
+
     public static Map<Integer, String> orderByMapping;
 
     static {
@@ -69,16 +78,28 @@ public class ProjectConstants {
 
     }
 
+    public static Map<Integer, String> filterMapping;
+
+    static {
+        filterMapping = new HashMap<>();
+
+        filterMapping.put(R.id.radioFilterSharedWithMe, SHARED_WITH_ME);
+        filterMapping.put(R.id.radioFilterOwnedByMe, OWNED_BY_ME);
+        filterMapping.put(R.id.radioFilterBookmarked, BOOKMARKED);
+        filterMapping.put(R.id.radioFilterTagged, TAGGED);
+
+    }
+
     public static Map<String, Integer> tagNameIconMapping;
 
     static {
         tagNameIconMapping = new HashMap<>();
-        tagNameIconMapping.put("blueTag", R.drawable.tag_blue_icon);
-        tagNameIconMapping.put("redTag", R.drawable.tag_red_icon);
-        tagNameIconMapping.put("greenTag", R.drawable.tag_green_icon);
-        tagNameIconMapping.put("orangeTag", R.drawable.tag_orange_icon);
-        tagNameIconMapping.put("yellowTag", R.drawable.tag_yellow_icon);
-        tagNameIconMapping.put("noTag", R.drawable.tag_white_icon);
+        tagNameIconMapping.put("blueTag", R.drawable.tag_blue);
+        tagNameIconMapping.put("redTag", R.drawable.tag_red);
+        tagNameIconMapping.put("greenTag", R.drawable.tag_green);
+        tagNameIconMapping.put("orangeTag", R.drawable.tag_orange);
+        tagNameIconMapping.put("yellowTag", R.drawable.tag_yellow);
+        tagNameIconMapping.put("noTag", R.drawable.tag_white);
     }
 
     public static Map<Integer, String> tagIdNameMapping;

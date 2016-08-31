@@ -3,65 +3,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:clickable="true"
     app:cardCornerRadius="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:weightSum="1"
-        android:gravity="center_vertical">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/unknow_icon"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:src="@drawable/unknow_icon" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_weight="1.00">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="Recycler View"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp" />
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
             <TextView
                 android:id="@+id/infosTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Recycler View"
+                android:layout_gravity="bottom|right"
+                android:layout_marginTop="0dp"
                 android:gravity="right"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="0dp" />
-        </LinearLayout>
+                android:text="Recycler View"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+
 
         <ImageView
             android:id="@+id/itemMenuView"
             android:layout_width="34dp"
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_dots"
-            android:layout_marginRight="5dp" />
+            android:src="@drawable/ic_dots" />
 
         <ImageView
             android:id="@+id/itemTagView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/tag_white_icon"
             android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/tag_white"
             android:textAlignment="center" />
 
     </LinearLayout>

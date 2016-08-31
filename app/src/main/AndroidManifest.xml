@@ -67,6 +67,14 @@
             android:theme="@style/AppTheme.Dialog"
             android:finishOnTaskLaunch="true"/>
 
+        <activity android:name=".service.queries.FilterActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:finishOnTaskLaunch="true"/>
+
+        <activity android:name=".service.queries.SelectTagDialogActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:finishOnTaskLaunch="true"/>
+
 
         <activity android:name=".service.activities.DeleteItemActivity"
             android:theme="@style/AppTheme.Dialog"

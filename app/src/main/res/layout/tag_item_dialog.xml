@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:drawableRight="@drawable/tag_blue_icon"
+            android:drawableRight="@drawable/tag_blue"
             android:text="Blue Tag"
             android:textAlignment="center" />
 
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:drawableRight="@drawable/tag_red_icon"
+            android:drawableRight="@drawable/tag_red"
             android:text="Red Tag"
             android:textAlignment="center" />
 
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:drawableRight="@drawable/tag_green_icon"
+            android:drawableRight="@drawable/tag_green"
             android:text="Green Tag"
             android:textAlignment="center" />
 
@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:drawableRight="@drawable/tag_orange_icon"
+            android:drawableRight="@drawable/tag_orange"
             android:text="Orange Tag"
             android:textAlignment="center" />
 
@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:drawableRight="@drawable/tag_yellow_icon"
+            android:drawableRight="@drawable/tag_yellow"
             android:text="Yellow Tag"
             android:textAlignment="center" />
 
@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:drawableRight="@drawable/tag_white_icon"
+            android:drawableRight="@drawable/tag_white"
             android:text="No Tag"
             android:textAlignment="center" />
 

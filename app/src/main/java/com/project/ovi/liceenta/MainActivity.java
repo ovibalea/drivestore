@@ -31,6 +31,7 @@ import com.project.ovi.liceenta.service.activities.CreateFileActivity;
 import com.project.ovi.liceenta.service.activities.CreateFolderActivity;
 import com.project.ovi.liceenta.service.activities.OpenFileActivity;
 import com.project.ovi.liceenta.service.activities.UploadFileActivity;
+import com.project.ovi.liceenta.service.queries.FilterActivity;
 import com.project.ovi.liceenta.service.queries.OrderActivity;
 import com.project.ovi.liceenta.service.queries.QueryItemsByFolderIdActivity;
 import com.project.ovi.liceenta.service.sms.SmsBackupActivity;
@@ -120,6 +121,15 @@ public class MainActivity extends AppCompatActivity
             this.foldersVisited.push(folderId);
             Intent intent = new Intent(MainActivity.this, OrderActivity.class);
             intent.putExtra(ProjectConstants.FOLDER_ID, folderId);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, ProjectConstants.REQUEST_CONTENT);
+        }
+    }
+
+    public void filterContent() {
+        if (DriveServiceManager.getInstance() != null) {
+            this.foldersVisited.push(folderId);
+            Intent intent = new Intent(MainActivity.this, FilterActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, ProjectConstants.REQUEST_CONTENT);
         }
@@ -221,14 +231,14 @@ public class MainActivity extends AppCompatActivity
 
         //Floating Action Button 1
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-        layoutParams.bottomMargin += (int) (fab1.getHeight() * 0.75);
+        layoutParams.bottomMargin += (int) (fab1.getHeight() * 1.5);
         fab1.setLayoutParams(layoutParams);
         fab1.startAnimation(show_fab_1);
         fab1.setClickable(true);
 
         //Floating Action Button 2
         FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-        layoutParams2.bottomMargin += (int) (fab2.getHeight() * 1.5);
+        layoutParams2.bottomMargin += (int) (fab2.getHeight() * 3.0);
         fab2.setLayoutParams(layoutParams2);
         fab2.startAnimation(show_fab_2);
         fab2.setClickable(true);
@@ -240,14 +250,14 @@ public class MainActivity extends AppCompatActivity
 
         //Floating Action Button 1
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-        layoutParams.bottomMargin -= (int) (fab1.getHeight() * 0.75);
+        layoutParams.bottomMargin -= (int) (fab1.getHeight() * 1.5);
         fab1.setLayoutParams(layoutParams);
         fab1.startAnimation(hide_fab_1);
         fab1.setClickable(false);
 
         //Floating Action Button 2
         FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-        layoutParams2.bottomMargin -= (int) (fab2.getHeight() * 1.5);
+        layoutParams2.bottomMargin -= (int) (fab2.getHeight() * 3.0);
         fab2.setLayoutParams(layoutParams2);
         fab2.startAnimation(hide_fab_2);
         fab2.setClickable(false);
@@ -366,6 +376,7 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.action_filter:
+                filterContent();
                 return true;
 
             case R.id.action_reload:

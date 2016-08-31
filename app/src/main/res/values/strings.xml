@@ -8,7 +8,7 @@
     <string name="activity_search">Search</string>
     <string name="activity_sort">Sort</string>
     <string name="activity_filter">Filter</string>
-    <string name="activity_reload">Reload</string>
+    <string name="activity_reload">My Drive</string>
 
 
     <string name="newFileName">New File</string>
